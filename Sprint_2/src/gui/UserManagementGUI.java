@@ -1,41 +1,30 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.metal.MetalFileChooserUI.FilterComboBoxRenderer;
-
 import businessLogic.BLFacade;
 import domain.User;
-
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.RowSorter;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
@@ -43,33 +32,43 @@ import javax.swing.table.TableRowSorter;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SortOrder;
 import javax.swing.JCheckBox;
 
 public class UserManagementGUI extends JDialog{
 
+	private User user; //logged user
+	
 	private JPanel contentPane;
-	private JTextField searchField = new JTextField("");
-
-	String searchinput;
-	int searchfilter;
-
+	private JPanel panel;
+	private JTable userTable;
+	private NonEditableTableModel userTableModel;
+	
+	private JScrollPane scrollPane = new JScrollPane();
+	private JCheckBox chckbxCasesSensitive = new JCheckBox(ResourceBundle.getBundle("Etiquetas").getString("CaseSensitive"));
+	private JLabel lblSearchBy = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("SearchBy"));
+	private JLabel lblSearch = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("Search"));
+	private JLabel lblNewLabel = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("UserManagement"));
+	private JLabel showingCountLabel = new JLabel("");
+	
+	private JTextField searchField = new JTextField();
+	private String searchinput;
+	private int searchfilter;
+	private List<User> searchResult;
+	
 	private final int PAGESIZE = 15;
-	List<User> searchResult;
-	int currentpage;
+	private int currentpage;
 
-
-
-	private JButton btnSearch = new JButton();
-	private JButton btnNextPage = new JButton("Next page");
-	private JButton btnPrevPage = new JButton("Previous page");
+	private JButton btnSearch;
+	private JButton btnNextPage;
+	private JButton btnPrevPage;
+	private JButton btnAddAUser;
+	private JButton btnCancel;
+	
 	String[] filters = { "ID", "Name", "Surname", "E-mail"};
 	private JComboBox filterComboBox = new JComboBox(filters);
-	JLabel showingCountLabel = new JLabel("");
 
 	private String[] columnNamesUsers = new String[] {
 			ResourceBundle.getBundle("Etiquetas").getString("ID"), 
@@ -79,25 +78,21 @@ public class UserManagementGUI extends JDialog{
 			ResourceBundle.getBundle("Etiquetas").getString("Status"), 
 			"", ""
 	};
-
-	private NonEditableTableModel userTableModel = new NonEditableTableModel(null, columnNamesUsers);
-	private JTable userTable;
-
-
-
-
-
-
+		
+	
+	private BLFacade facade=MainGUI.getBusinessLogic();
+	
 
 	/** 
 	 * Create the frame.
 	 */	
-	public UserManagementGUI()
+	public UserManagementGUI(User u)
 	{
 		setTitle("User management");
 		try
 		{
 			jbInit();
+			user=u;
 		}
 		catch(Exception e)
 		{
@@ -108,18 +103,15 @@ public class UserManagementGUI extends JDialog{
 
 	private void jbInit() throws Exception{
 
-		setModal(true);
-		setResizable(false);
-
+		panel = new JPanel();
 		userTable = new JTable();
-		userTable.setModel(userTableModel);
 		userTable.getTableHeader().setReorderingAllowed(false);
 		userTable.getTableHeader().setResizingAllowed(false);
 		userTable.setRowHeight(25);
 
-
-
-
+		userTableModel = new NonEditableTableModel(null, columnNamesUsers);
+		userTable.setModel(userTableModel);
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 881, 589);
 		contentPane = new JPanel();
@@ -127,7 +119,6 @@ public class UserManagementGUI extends JDialog{
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{48, 30, 30, 30, 30, 0, 20, 70, 47, 70, 20, 30, 60, 103, 20, 20, 20, 0};
@@ -136,7 +127,6 @@ public class UserManagementGUI extends JDialog{
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 
-		JLabel lblNewLabel = new JLabel("User management");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.gridwidth = 4;
@@ -144,8 +134,7 @@ public class UserManagementGUI extends JDialog{
 		gbc_lblNewLabel.gridx = 1;
 		gbc_lblNewLabel.gridy = 1;
 		panel.add(lblNewLabel, gbc_lblNewLabel);
-
-		JLabel lblSearch = new JLabel("Search:");
+		
 		GridBagConstraints gbc_lblSearch = new GridBagConstraints();
 		gbc_lblSearch.anchor = GridBagConstraints.WEST;
 		gbc_lblSearch.insets = new Insets(0, 0, 5, 5);
@@ -153,7 +142,6 @@ public class UserManagementGUI extends JDialog{
 		gbc_lblSearch.gridy = 3;
 		panel.add(lblSearch, gbc_lblSearch);
 
-		searchField = new JTextField();
 		GridBagConstraints gbc_searchField = new GridBagConstraints();
 		gbc_searchField.gridwidth = 3;
 		gbc_searchField.insets = new Insets(0, 0, 5, 5);
@@ -163,16 +151,12 @@ public class UserManagementGUI extends JDialog{
 		panel.add(searchField, gbc_searchField);
 		searchField.setColumns(10);
 
-
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSearch.gridx = 5;
 		gbc_btnSearch.gridy = 3;
-		panel.add(btnSearch, gbc_btnSearch);
-		btnSearch.setIcon(new ImageIcon(ImageIO.read(new File("images/searchicon2.png"))));
-
-
-		JLabel lblSearchBy = new JLabel("Search by:");
+		panel.add(getBtnSearch(), gbc_btnSearch);
+		
 		GridBagConstraints gbc_lblSearchBy = new GridBagConstraints();
 		gbc_lblSearchBy.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSearchBy.anchor = GridBagConstraints.EAST;
@@ -186,13 +170,11 @@ public class UserManagementGUI extends JDialog{
 		gbc_filterComboBox.gridx = 8;
 		gbc_filterComboBox.gridy = 3;
 		
-		JCheckBox chckbxCasesSensitive = new JCheckBox("case sensitive");
 		GridBagConstraints gbc_chckbxCasesSensitive = new GridBagConstraints();
 		gbc_chckbxCasesSensitive.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxCasesSensitive.gridx = 9;
 		gbc_chckbxCasesSensitive.gridy = 3;
 		panel.add(chckbxCasesSensitive, gbc_chckbxCasesSensitive);
-
 
 		GridBagConstraints gbc_showingCountLabel = new GridBagConstraints();
 		gbc_showingCountLabel.gridwidth = 5;
@@ -201,102 +183,33 @@ public class UserManagementGUI extends JDialog{
 		gbc_showingCountLabel.gridy = 10;
 		panel.add(showingCountLabel, gbc_showingCountLabel);
 
-
-		btnPrevPage.setEnabled(false);
-		btnPrevPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				currentpage--;
-				loadPage(currentpage);
-				if(currentpage==1) {
-					btnPrevPage.setEnabled(false);
-				}
-				btnNextPage.setEnabled(true);
-			}
-		});
 		GridBagConstraints gbc_btnPrevPage = new GridBagConstraints();
 		gbc_btnPrevPage.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnPrevPage.insets = new Insets(0, 0, 5, 5);
 		gbc_btnPrevPage.gridx = 12;
 		gbc_btnPrevPage.gridy = 10;
-		panel.add(btnPrevPage, gbc_btnPrevPage);
+		panel.add(getBtnPrevPage(), gbc_btnPrevPage);
 
-
-		btnNextPage.setEnabled(false);
-		btnNextPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				currentpage++;
-				loadPage(currentpage);
-				if((currentpage*PAGESIZE)>searchResult.size()) {
-					btnNextPage.setEnabled(false);
-				}
-				btnPrevPage.setEnabled(true);
-			}
-		});
 		GridBagConstraints gbc_btnNextPage = new GridBagConstraints();
 		gbc_btnNextPage.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNextPage.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNextPage.gridx = 13;
 		gbc_btnNextPage.gridy = 10;
-		panel.add(btnNextPage, gbc_btnNextPage);
+		panel.add(getBtnNextPage(), gbc_btnNextPage);
 
-
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {	
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
 		GridBagConstraints gbc_cancelButton = new GridBagConstraints();
 		gbc_cancelButton.gridwidth = 2;
 		gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
 		gbc_cancelButton.gridx = 13;
 		gbc_cancelButton.gridy = 12;
-		panel.add(cancelButton, gbc_cancelButton);
+		panel.add(getBtnCancel(), gbc_cancelButton);
 
-		filterComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"ID", "Name", "Surname", "E-mail"}));
-		panel.add(filterComboBox, gbc_filterComboBox);	
-
-		BLFacade facade=MainGUI.getBusinessLogic();
-
-		ActionListener searchListener =new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnNextPage.setEnabled(false);
-				searchinput = searchField.getText();		
-				searchfilter = filterComboBox.getSelectedIndex();
-
-				//restart model
-				userTableModel.setDataVector(null, columnNamesUsers);
-				userTableModel.setColumnCount(7); 
-
-				//perform search and create the table model with the results
-				searchResult=facade.searchByCriteria(searchinput,searchfilter,chckbxCasesSensitive.isSelected());		
-				int entries = loadPage(1);
-				if(searchResult.size() > PAGESIZE){
-					btnNextPage.setEnabled(true);
-				}
-				currentpage = 1;
-			}
-		};
-		btnSearch.addActionListener(searchListener);
-		searchListener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
-
-		JButton btnAddAUser = new JButton("Add a user");
-		btnAddAUser.addActionListener(new ActionListener() {	
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				RegisterGUI j = new RegisterGUI(true);
-				j.setVisible(true);
-				searchListener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
-			}
-		});
 		GridBagConstraints gbc_btnAddAUser = new GridBagConstraints();
 		gbc_btnAddAUser.insets = new Insets(0, 0, 5, 5);
 		gbc_btnAddAUser.gridx = 13;
 		gbc_btnAddAUser.gridy = 3;
-		panel.add(btnAddAUser, gbc_btnAddAUser);
+		panel.add(getBtnAddUser(), gbc_btnAddAUser);
 
-		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridheight = 5;
@@ -307,46 +220,169 @@ public class UserManagementGUI extends JDialog{
 		gbc_scrollPane.gridy = 5;
 		panel.add(scrollPane, gbc_scrollPane);
 		scrollPane.setViewportView(userTable);
+			
+		panel.add(filterComboBox, gbc_filterComboBox);
 		
-		
+		btnNextPage.setEnabled(false);
+		btnPrevPage.setEnabled(false);
+
+		searchListener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
 	}
 
+	
+	private JButton getBtnSearch() {
+		if(btnSearch==null) {
+			btnSearch = new JButton();
+			try {
+				btnSearch.setIcon(new ImageIcon(ImageIO.read(new File("images/searchicon2.png"))));
+				btnSearch.addActionListener(searchListener);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return btnSearch;
+	}
+	
+	ActionListener searchListener =new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			btnNextPage.setEnabled(false);
+			searchinput = searchField.getText();		
+			searchfilter = filterComboBox.getSelectedIndex();
+
+			//restart model
+			userTableModel.setDataVector(null, columnNamesUsers);
+			userTableModel.setColumnCount(7); 
+
+			//perform search and create the table model with the results
+			searchResult=facade.searchByCriteria(searchinput,searchfilter,chckbxCasesSensitive.isSelected());		
+			loadPage(1);
+			if(searchResult.size() > PAGESIZE){
+				btnNextPage.setEnabled(true);
+			}
+			currentpage = 1;
+		}
+	};
+	
+	private JButton getBtnCancel() {
+		if(btnCancel==null) {
+			btnCancel = new JButton();
+			btnCancel.setText(ResourceBundle.getBundle("Etiquetas").getString("Cancel"));
+			btnCancel.addActionListener(new ActionListener() {	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return btnCancel;
+	}
+
+	private JButton getBtnAddUser() {
+		if(btnAddAUser==null) {
+			btnAddAUser = new JButton();
+			btnAddAUser.setText(ResourceBundle.getBundle("Etiquetas").getString("AddUser"));
+			btnAddAUser.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					RegisterGUI j = new RegisterGUI(true);
+					j.setVisible(true);
+					searchListener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
+				}
+			});
+		}
+		return btnAddAUser;
+	}
+
+	private JButton getBtnPrevPage() {
+		if(btnPrevPage==null) {
+			btnPrevPage = new JButton();
+			btnPrevPage.setText(ResourceBundle.getBundle("Etiquetas").getString("PreviousPage"));
+			btnPrevPage.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					currentpage--;
+					loadPage(currentpage);
+					if(currentpage==1) {
+						btnPrevPage.setEnabled(false);
+					}
+					btnNextPage.setEnabled(true);
+				}
+			});
+		}
+		return btnPrevPage;
+	}
+	
+
+	private JButton getBtnNextPage() {
+		if(btnNextPage==null) {
+			btnNextPage = new JButton();
+			btnNextPage.setText(ResourceBundle.getBundle("Etiquetas").getString("NextPage"));
+			btnNextPage.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					currentpage++;
+					loadPage(currentpage);
+					if((currentpage*PAGESIZE)>searchResult.size()) {
+						btnNextPage.setEnabled(false);
+					}
+					btnPrevPage.setEnabled(true);
+				}
+			});
+		}
+		return btnNextPage;
+	}
+	
 
 	//Actions for the Edit and Delete buttons on the table
-	BLFacade facade=MainGUI.getBusinessLogic();
 	Action delete = new AbstractAction()
 	{
 		public void actionPerformed(ActionEvent e)
-		{
+		{	
+			int option;
 			String username = (String)userTableModel.getValueAt(userTable.getSelectedRow(), 0);
 
-			int confirmed = JOptionPane.showConfirmDialog(getParent(), "Delete the user " + username + "?" , "Confirm deletion", JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
-			if (confirmed==0){
-				int index = (currentpage-1)*PAGESIZE;
-				searchResult.remove(index+userTable.getSelectedRow());
-				facade.removeUser((String)userTable.getValueAt(userTable.getSelectedRow(), 0));
-
-				if((searchResult.size()-index)==0) { //if we deleted the last element of the page
-					if(currentpage==1) { 
-						loadPage(currentpage);
+			//if we try do delete our own admin account
+			if(username.equals(user.getID())) {
+				option = JOptionPane.showConfirmDialog(getParent(),"Deleting your account is not reversible and will result in a log out, are you sure you want to continue?","Confirm deletion" ,
+													JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
+				if(option==0) {
+					facade.removeUser((String)userTable.getValueAt(userTable.getSelectedRow(), 0));
+					System.gc();
+					for (Window window : Window.getWindows()) {
+					    window.dispose();
 					}
-					else {  
-						currentpage--;
+					JFrame frame = new MainGUI();
+					frame.setVisible(true);
+				}
+			}
+			else {
+				option = JOptionPane.showConfirmDialog(getParent(), "Delete the user " + username + "?" , "Confirm deletion", JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
+				if (option==0){
+					int index = (currentpage-1)*PAGESIZE;
+					searchResult.remove(index+userTable.getSelectedRow());
+					facade.removeUser((String)userTable.getValueAt(userTable.getSelectedRow(), 0));
+
+					if((searchResult.size()-index)==0) { //if we deleted the last element of the page
+						if(currentpage==1) { 
+							loadPage(currentpage);
+						}
+						else {  
+							currentpage--;
+							loadPage(currentpage);
+							btnNextPage.setEnabled(false);
+							if(currentpage==1) {
+								btnPrevPage.setEnabled(false);
+							}
+						}
+					}
+					else { 
 						loadPage(currentpage);
-						btnNextPage.setEnabled(false);
-						if(currentpage==1) {
-							btnPrevPage.setEnabled(false);
+						if(searchResult.size()<=(currentpage*PAGESIZE)) {//if the current page has become the last page
+							btnNextPage.setEnabled(false);
 						}
 					}
 				}
-				else { 
-					loadPage(currentpage);
-					if(searchResult.size()<=(currentpage*PAGESIZE)) {//if the current page has become the last page
-						btnNextPage.setEnabled(false);
-					}
-				}
 			}
-
 		}
 		
 	};
@@ -415,30 +451,6 @@ public class UserManagementGUI extends JDialog{
 		
 		return elementsOnPage;
 	}
-
-	/**
-	 * Sorts the current page based on the selected criteria.
-	 * 
-	 * @param index
-	 * @param criteria
-	 */
-	public void sortPage(int index, int criteria) {
-		switch(criteria) {
-		case 1:
-
-			break;
-		case 2:
-
-			break;
-		case 3:
-
-			break;
-		default:
-
-			break;
-		}
-	}	
-
 
 	/**
 	 * Creates a new row in the search table with a User's data.

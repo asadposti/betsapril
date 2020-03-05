@@ -132,7 +132,7 @@ public class AdminMainGUI extends JFrame {
 			jContentPane.add(getIDLabel());
 			jContentPane.add(getIncomeLabel());
 			
-			JLabel adminLabel = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("AdminMainGUI.lblNewLabel.text")); //$NON-NLS-1$ //$NON-NLS-2$
+			JLabel adminLabel = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("Administrator")); //$NON-NLS-1$ //$NON-NLS-2$
 			adminLabel.setFont(new Font("Source Sans Pro Black", Font.ITALIC, 14));
 			adminLabel.setForeground(Color.RED);
 			adminLabel.setBounds(160, 66, 125, 42);
@@ -238,7 +238,7 @@ public class AdminMainGUI extends JFrame {
 			JButtonManageUsers.setText(ResourceBundle.getBundle("Etiquetas").getString("ManageUsers")); //$NON-NLS-1$ //$NON-NLS-2$
 			JButtonManageUsers.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JDialog a = new UserManagementGUI();
+					JDialog a = new UserManagementGUI(user);
 
 					a.setVisible(true);
 				}
@@ -363,14 +363,14 @@ public class AdminMainGUI extends JFrame {
 	}
 	private JLabel getLblAccount() {
 		if (lblAccount == null) {
-			lblAccount = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("AdminMainGUI.lblAccount.text")); //$NON-NLS-1$ //$NON-NLS-2$
+			lblAccount = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("Account")); //$NON-NLS-1$ //$NON-NLS-2$
 			lblAccount.setBounds(32, 130, 56, 14);
 		}
 		return lblAccount;
 	}
 	private JLabel getLblCash() {
 		if (lblCash == null) {
-			lblCash = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("AdminMainGUI.lblAvailableIncome.text")); //$NON-NLS-1$ //$NON-NLS-2$
+			lblCash = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("Cash")); //$NON-NLS-1$ //$NON-NLS-2$
 			lblCash.setBounds(32, 155, 56, 14);
 		}
 		return lblCash;

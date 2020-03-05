@@ -112,7 +112,7 @@ public class UserMainGUI extends JFrame {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			GridBagLayout gbl_jContentPane = new GridBagLayout();
-			gbl_jContentPane.columnWidths = new int[]{40, 10, 20, 30, 94, 16, 0, 39, 61, 20, 10, 0};
+			gbl_jContentPane.columnWidths = new int[]{40, 10, 20, 30, 94, 16, 0, 39, 61, 38, 40, 0};
 			gbl_jContentPane.rowHeights = new int[]{20, 26, 0, 18, 50, 0, 0, 21, 13, 67, 15, 27, 15, 0};
 			gbl_jContentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			gbl_jContentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -162,10 +162,10 @@ public class UserMainGUI extends JFrame {
 			jContentPane.add(getIncomeLabel(), gbc_incomeLabel);
 			GridBagConstraints gbc_jLabelSelectOption = new GridBagConstraints();
 			gbc_jLabelSelectOption.gridheight = 2;
-			gbc_jLabelSelectOption.gridwidth = 8;
+			gbc_jLabelSelectOption.gridwidth = 9;
 			gbc_jLabelSelectOption.fill = GridBagConstraints.BOTH;
 			gbc_jLabelSelectOption.insets = new Insets(0, 0, 5, 5);
-			gbc_jLabelSelectOption.gridx = 2;
+			gbc_jLabelSelectOption.gridx = 1;
 			gbc_jLabelSelectOption.gridy = 7;
 			jContentPane.add(getLbSelectOption(), gbc_jLabelSelectOption);
 			GridBagConstraints gbc_jButtonQueryQueries = new GridBagConstraints();
@@ -361,19 +361,19 @@ public class UserMainGUI extends JFrame {
 	}
 	private JLabel getCashLabel() {
 		if (lblCash == null) {
-			lblCash = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("UserMainGUI.lblCash.text")); //$NON-NLS-1$ //$NON-NLS-2$
+			lblCash = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("Cash")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return lblCash;
 	}
 	private JLabel getIDLabel() {
 		if (IDLabel == null) {
-			IDLabel = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("UserMainGUI.lblNewLabel.text")); //$NON-NLS-1$ //$NON-NLS-2$
+			IDLabel = new JLabel(""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return IDLabel;
 	}
 	private JLabel getIncomeLabel() {
 		if (incomeLabel == null) {
-			incomeLabel = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("UserMainGUI.incomeLabel.text")); //$NON-NLS-1$ //$NON-NLS-2$
+			incomeLabel = new JLabel(); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return incomeLabel;
 	}

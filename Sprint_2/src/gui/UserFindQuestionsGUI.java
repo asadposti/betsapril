@@ -215,14 +215,14 @@ public class UserFindQuestionsGUI extends JDialog {
 		getContentPane().add(betTextField);
 		betTextField.setColumns(10);
 
-		JLabel errorlabel = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("UserFindQuestionsGUI.label.text"));
+		JLabel errorlabel = new JLabel();
 		errorlabel.setHorizontalAlignment(SwingConstants.CENTER);
 		errorlabel.setBackground(Color.RED);
 		errorlabel.setForeground(Color.RED);
 		errorlabel.setBounds(161, 396, 406, 25);
 		getContentPane().add(errorlabel);
 
-		JButton btnBet = new JButton(ResourceBundle.getBundle("Etiquetas").getString("UserFindQuestionsGUI.btnBet.text")); //$NON-NLS-1$ //$NON-NLS-2$
+		JButton btnBet = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Bet")); //$NON-NLS-1$ //$NON-NLS-2$
 		btnBet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				/*
