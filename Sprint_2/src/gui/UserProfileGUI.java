@@ -27,9 +27,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 public class UserProfileGUI extends JDialog {
+	private static final long serialVersionUID = 1L;
 
-	private User user; //logged user
-	
 	private JPanel contentPane;
 
 	/**
@@ -52,10 +51,8 @@ public class UserProfileGUI extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public UserProfileGUI(User u) {
+	public UserProfileGUI() {
 		setTitle("User profile");
-		
-		this.user = u; //information of logged user
 		
 		this.setModal(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -87,7 +84,7 @@ public class UserProfileGUI extends JDialog {
 		contentPane.add(lblUsername, gbc_lblUsername);
 		
 		JTextArea textArea = new JTextArea();
-		textArea.setText(user.getID());
+		textArea.setText(UserLoginGUI.getLoggedUser().getID());
 		textArea.setBackground(SystemColor.menu);
 		textArea.setEditable(false);
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
@@ -107,7 +104,7 @@ public class UserProfileGUI extends JDialog {
 		contentPane.add(lblAvailableMoney, gbc_lblAvailableMoney);
 		
 		JTextArea textArea_3 = new JTextArea();
-		textArea_3.setText(String.valueOf(user.getCash()));
+		textArea_3.setText(String.valueOf(UserLoginGUI.getLoggedUser().getCash()));
 		textArea_3.setBackground(SystemColor.menu);
 		textArea_3.setEditable(false);
 		GridBagConstraints gbc_textArea_3 = new GridBagConstraints();
@@ -126,7 +123,7 @@ public class UserProfileGUI extends JDialog {
 		contentPane.add(lblName, gbc_lblName);
 		
 		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setText(user.getName());
+		textArea_1.setText(UserLoginGUI.getLoggedUser().getName());
 		textArea_1.setBackground(SystemColor.menu);
 		textArea_1.setEditable(false);
 		GridBagConstraints gbc_textArea_1 = new GridBagConstraints();
@@ -146,7 +143,7 @@ public class UserProfileGUI extends JDialog {
 		contentPane.add(lblLastName, gbc_lblLastName);
 		
 		JTextArea textArea_2 = new JTextArea();
-		textArea_2.setText(user.getSurname());
+		textArea_2.setText(UserLoginGUI.getLoggedUser().getSurname());
 		textArea_2.setBackground(SystemColor.menu);
 		textArea_2.setEditable(false);
 		GridBagConstraints gbc_textArea_2 = new GridBagConstraints();
@@ -176,7 +173,7 @@ public class UserProfileGUI extends JDialog {
 	
 		  DefaultListModel<String> list = 
 				new DefaultListModel<String>();
-		  for (Bet v:user.getBets()) {
+		  for (Bet v:UserLoginGUI.getLoggedUser().getBets()) {
 			  list.addElement(""+"Your Bet Amount:>  "+v.getAmount()+"  "+"And Your Question:>  "+
 		  v.getQuestion().getQuestion());
 			  }

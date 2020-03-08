@@ -1,6 +1,7 @@
 package domain;
 
 import java.io.*;
+import java.util.Vector;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -20,14 +21,20 @@ public class Question implements Serializable {
 	private Integer questionNumber;
 	private String question; 
 	private float betMinimum;
-	private String result;  
+	private int result;  
 	@XmlIDREF
 	private Event event;
+	
+	private String[] answers;
+	private int[] odds;
+	
 
 	public Question(){
 		super();
 	}
 	
+	
+
 	public Question(Integer queryNumber, String query, float betMinimum, Event event) {
 		super();
 		this.questionNumber = queryNumber;
@@ -113,7 +120,7 @@ public class Question implements Serializable {
 	 * 
 	 * @return the the query result
 	 */
-	public String getResult() {
+	public int getResult() {
 		return result;
 	}
 
@@ -125,7 +132,7 @@ public class Question implements Serializable {
 	 * @param result of the query to be setted
 	 */
 	
-	public void setResult(String result) {
+	public void setResult(int result) {
 		this.result = result;
 	}
 
@@ -152,6 +159,25 @@ public class Question implements Serializable {
 	}
 
 
+	/**
+	 * Get the answers associated to the question
+	 * 
+	 * @return the associated answers
+	 */
+	
+	public String[] getAnswers() {
+		return answers;
+	}
+
+	
+	/**
+	 * Set the answers associated to the question
+	 * 
+	 * @param answers to associate to the question
+	 */
+	public void setAnswer(String answer, int i) {
+		this.answers[i] = answer;
+	}
 
 
 	public String toString(){

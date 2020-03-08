@@ -8,6 +8,8 @@ import java.util.List;
 import domain.Question;
 import domain.User;
 import domain.Event;
+import domain.Gender;
+import domain.Nationality;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
 import exceptions.QuestionAlreadyExist;
@@ -66,7 +68,8 @@ public interface BLFacade  {
 	 * @return					the newly created User object.
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
-	@WebMethod public User registerUser(String iD, String password, String name, String surname, String email, boolean isAdmin) throws invalidID;
+	@WebMethod public User registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
+			Nationality nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID;
 
 	/**
 	 * This methods checks the validity of the credentials (id / password) inputed upon login.
@@ -109,7 +112,7 @@ public interface BLFacade  {
 	 * @param q
 	 * @param amount
 	 */
-	@WebMethod public void placeBet(Question q, User u, float amount)throws InsufficientCash;
+	@WebMethod public void placeBet(Question q, User u, float amount, int answer)throws InsufficientCash;
 	
 	/**
 	 * This method calls the data access to initialize the database with some events and questions.

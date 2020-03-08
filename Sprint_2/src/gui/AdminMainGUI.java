@@ -8,14 +8,11 @@ import javax.imageio.ImageIO;
 
 
 import javax.swing.*;
-
 import domain.Event;
 import domain.User;
 import businessLogic.BLFacade;
-
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -23,19 +20,15 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 
 public class AdminMainGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private User user; //logged user
 	
 	private JPanel jContentPane = null;
 	private JButton JButtonCheckProfile = null;
@@ -69,13 +62,12 @@ public class AdminMainGUI extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public AdminMainGUI(User u) {
+	public AdminMainGUI() {
 		super();
-		user = u;
 		setResizable(false);
 
-		getIDLabel().setText(u.getID());
-		getIncomeLabel().setText(u.getCash() + "€");
+		getIDLabel().setText(UserLoginGUI.getLoggedUser().getID());
+		getIncomeLabel().setText(UserLoginGUI.getLoggedUser().getCash() + "€");
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -161,9 +153,7 @@ public class AdminMainGUI extends JFrame {
 				JButtonCheckProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("CheckProfile"));
 				JButtonCheckProfile.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
-						BLFacade facade=MainGUI.getBusinessLogic();
-						//Vector<Event> events=facade.getAllEvents();
-						JDialog a = new UserProfileGUI(user);
+						JDialog a = new UserProfileGUI();
 						a.setVisible(true);
 					}
 				});
@@ -186,9 +176,10 @@ public class AdminMainGUI extends JFrame {
 			jButtonQueryQueries.setEnabled(true);
 			jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JDialog a = new UserFindQuestionsGUI(user);
+					dispose();
+					JDialog a = new FindQuestionsGUI();
 					a.setVisible(true);
-					incomeLabel.setText(user.getCash() +"€");
+					incomeLabel.setText(UserLoginGUI.getLoggedUser().getCash() +"€");
 				}
 			});
 		}
@@ -214,8 +205,6 @@ public class AdminMainGUI extends JFrame {
 				JButtonCreateQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateQuery"));
 				JButtonCreateQueries.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
-						BLFacade facade=MainGUI.getBusinessLogic();
-						//Vector<Event> events=facade.getAllEvents();
 						JDialog a = new CreateQuestionGUI(new Vector<Event>());
 						a.setVisible(true);
 					}
@@ -238,7 +227,7 @@ public class AdminMainGUI extends JFrame {
 			JButtonManageUsers.setText(ResourceBundle.getBundle("Etiquetas").getString("ManageUsers")); //$NON-NLS-1$ //$NON-NLS-2$
 			JButtonManageUsers.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JDialog a = new UserManagementGUI(user);
+					JDialog a = new UserManagementGUI();
 
 					a.setVisible(true);
 				}
@@ -313,9 +302,10 @@ public class AdminMainGUI extends JFrame {
 			btnLogOut = new JButton(ResourceBundle.getBundle("Etiquetas").getString("LogOut")); //$NON-NLS-1$ //$NON-NLS-2$
 			btnLogOut.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					UserLoginGUI.setLoggedUser(null);
 					JFrame user = new MainGUI();
 					user.setVisible(true);
-					AdminMainGUI.super.dispose();
+					dispose();
 				}
 			});
 			btnLogOut.setBounds(36, 36, 117, 25);

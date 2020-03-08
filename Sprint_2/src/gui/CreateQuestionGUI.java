@@ -2,20 +2,15 @@ package gui;
 
 import java.text.DateFormat;
 import java.util.*;
-
 import javax.swing.*;
-
 import com.toedter.calendar.JCalendar;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import businessLogic.BLFacade;
 import configuration.UtilDate;
 import domain.Event;
-import domain.Question;
 import exceptions.EventFinished;
 import exceptions.QuestionAlreadyExist;
 
@@ -214,7 +209,7 @@ public class CreateQuestionGUI extends JDialog {
 		Calendar calendar = jCalendar.getCalendar();
 		
 		int month = calendar.get(Calendar.MONTH);
-		int today=calendar.get(Calendar.DAY_OF_MONTH);
+		//int today=calendar.get(Calendar.DAY_OF_MONTH);
 
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		int offset = calendar.get(Calendar.DAY_OF_WEEK);

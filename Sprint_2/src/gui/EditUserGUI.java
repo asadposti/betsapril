@@ -1,34 +1,27 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import businessLogic.BLFacade;
-import domain.User;
 import exceptions.invalidID;
-
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-
 import java.awt.Color;
 import javax.swing.ButtonGroup;
 
 public class EditUserGUI extends JDialog {
-
+	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
 	private JTextField idField;

@@ -41,8 +41,7 @@ public class ApplicationLauncher {
 			if (c.isBusinessLogicLocal()) {
 				
 			 appFacadeInterface=new BLFacadeImplementation();
-				
-				
+						
 			}
 			
 			else { //Si es remoto
@@ -54,7 +53,7 @@ public class ApplicationLauncher {
 				URL url = new URL(serviceName);
 
 		 
-		        //1st argument refers to wsdl document above
+		        //1st argument refers to wsdl document abovea
 				//2nd argument is service name, refer to wsdl document above
 //		        QName qname = new QName("http://businessLogic/", "FacadeImplementationWSService");
 		        QName qname = new QName("http://businessLogic/", "BLFacadeImplementationService");

@@ -38,8 +38,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JCheckBox;
 
 public class UserManagementGUI extends JDialog{
-
-	private User user; //logged user
+	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
 	private JPanel panel;
@@ -68,7 +67,7 @@ public class UserManagementGUI extends JDialog{
 	private JButton btnCancel;
 	
 	String[] filters = { "ID", "Name", "Surname", "E-mail"};
-	private JComboBox filterComboBox = new JComboBox(filters);
+	private JComboBox<String> filterComboBox = new JComboBox(filters);
 
 	private String[] columnNamesUsers = new String[] {
 			ResourceBundle.getBundle("Etiquetas").getString("ID"), 
@@ -86,13 +85,12 @@ public class UserManagementGUI extends JDialog{
 	/** 
 	 * Create the frame.
 	 */	
-	public UserManagementGUI(User u)
+	public UserManagementGUI()
 	{
 		setTitle("User management");
 		try
 		{
 			jbInit();
-			user=u;
 		}
 		catch(Exception e)
 		{
@@ -104,6 +102,7 @@ public class UserManagementGUI extends JDialog{
 	private void jbInit() throws Exception{
 
 		panel = new JPanel();
+		setModal(true);
 		userTable = new JTable();
 		userTable.getTableHeader().setReorderingAllowed(false);
 		userTable.getTableHeader().setResizingAllowed(false);
@@ -121,9 +120,9 @@ public class UserManagementGUI extends JDialog{
 
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{48, 30, 30, 30, 30, 0, 20, 70, 47, 70, 20, 30, 60, 103, 20, 20, 20, 0};
+		gbl_panel.columnWidths = new int[]{48, 30, 30, 30, 30, 0, 20, 70, 47, 70, 20, 74, 60, 103, 20, 20, 20, 0};
 		gbl_panel.rowHeights = new int[]{33, 20, 20, 0, 20, 0, 30, 30, 30, 185, 20, 30, 0, 20, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 
@@ -335,15 +334,15 @@ public class UserManagementGUI extends JDialog{
 
 	//Actions for the Edit and Delete buttons on the table
 	Action delete = new AbstractAction()
-	{
+	{private static final long serialVersionUID = 1L;
 		public void actionPerformed(ActionEvent e)
 		{	
 			int option;
-			String username = (String)userTableModel.getValueAt(userTable.getSelectedRow(), 0);
+			String username = (String)userTable.getValueAt(userTable.getSelectedRow(), 0);
 
 			//if we try do delete our own admin account
-			if(username.equals(user.getID())) {
-				option = JOptionPane.showConfirmDialog(getParent(),"Deleting your account is not reversible and will result in a log out, are you sure you want to continue?","Confirm deletion" ,
+			if(username.equals(UserLoginGUI.getLoggedUser().getID())) {
+				option = JOptionPane.showConfirmDialog(getParent(),"Deleting your account is not reversible and will result in a log out, are you sure you want to continue?","Confirm deletion",
 													JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
 				if(option==0) {
 					facade.removeUser((String)userTable.getValueAt(userTable.getSelectedRow(), 0));
@@ -351,6 +350,7 @@ public class UserManagementGUI extends JDialog{
 					for (Window window : Window.getWindows()) {
 					    window.dispose();
 					}
+					UserLoginGUI.setLoggedUser(null);
 					JFrame frame = new MainGUI();
 					frame.setVisible(true);
 				}
@@ -388,7 +388,8 @@ public class UserManagementGUI extends JDialog{
 	};
 
 	Action edit = new AbstractAction()
-	{
+	{private static final long serialVersionUID = 1L;
+
 		public void actionPerformed(ActionEvent e)
 		{
 			int row = userTable.getSelectedRow();
@@ -438,17 +439,19 @@ public class UserManagementGUI extends JDialog{
 		userTable.getColumnModel().getColumn(5).setPreferredWidth(20);
 		userTable.getColumnModel().getColumn(6).setPreferredWidth(20);
 
-		ButtonColumn editButtonColumn = new ButtonColumn(userTable, edit, 5);
-		ButtonColumn deleteButtonColumn = new ButtonColumn(userTable, delete, 6);
-		editButtonColumn.setMnemonic(KeyEvent.VK_E);
-		deleteButtonColumn.setMnemonic(KeyEvent.VK_D);
+
 
 		//Table sorting settings (edit and delete button collums sorting disabled)
 		TableRowSorter<NonEditableTableModel> sorter = new TableRowSorter<NonEditableTableModel>(userTableModel);
+
 		sorter.setSortable(5, false);
 		sorter.setSortable(6, false);
 		userTable.setRowSorter(sorter);
 		
+		ButtonColumn editButtonColumn = new ButtonColumn(userTable, edit, 5);
+		ButtonColumn deleteButtonColumn = new ButtonColumn(userTable, delete, 6);
+		editButtonColumn.setMnemonic(KeyEvent.VK_E);
+		deleteButtonColumn.setMnemonic(KeyEvent.VK_D);
 		return elementsOnPage;
 	}
 

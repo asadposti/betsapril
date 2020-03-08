@@ -1,6 +1,7 @@
 package dataAccess;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,11 +20,14 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import javax.swing.ImageIcon;
 
 import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.Bet;
 import domain.Event;
+import domain.Gender;
+import domain.Nationality;
 import domain.Question;
 import domain.User;
 import exceptions.EventFinished;
@@ -144,24 +149,24 @@ public class DataAccessImplementation implements DataAccess {
 				
 			}
 			
-			User u1 = new User("aaa", "bbb", "Julen", "Urroz", "testemail@gmail.com", true);
-			User u2 = new User("bbb", "bbb", "JonAnder", "Beroz", "testemail2@gmail.com", true);
-			User u3 = new User("ccc", "bbb", "Asad", "Hayat", "testemail3@gmail.com", true);
 			
-			User u4 = new User("a", "a", "a", "a", "a@gmail.com", false);
-			User u5 = new User("a", "a", "a", "a", "a@gmail.com", false);
-			User u6 = new User("Virus", "aaaaaaaa", "Corona", "Virus", "cvirus@gmail.com", false);
-			User u7 = new User("Lemon", "12345678", "Yellow", "Lemon", "lemon@gmail.com", false);
-			User u8 = new User("George11", "bbb", "George", "Washington", "georgew@gmail.com", false);
-			User u9 = new User("Dog", "dddddddd", "Im", "Dog", "doggie@gmail.com", false);
-			User u10 = new User("Maria", "aaffgghh", "Maria", "Ardilla", "marie123@gmail.com", false);
-			User u11 = new User("xx", "xx", "xx", "xx", "xx@gmail.com", false);
-			User u12 = new User("ggwp", "gggggggg", "gg", "wp", "ggwp@gmail.com", false);
-			User u13 = new User("hello", "hhhhhhh", "hello", "hello", "hello@gmail.com", false);
-			User u14 = new User("r", "rrrrrrr", "r", "r", "r@gmail.com", false);
-			User u15 = new User("Granda", "bbbbbbbb", "Granda", "Arnold", "arnold666@gmail.com", false);
-			User u16 = new User("Antonio", "bbb", "Antonio", "Antonia", "Antoniojk@gmail.com", false);
-			User u17 = new User("Carl", "bbb", "Carl", "B", "carlb@gmail.com", false);
+			User u1 = new User("aaa", "bbb", "Julen", "Urroz", "testemail@gmail.com", "testaddr", Gender.MALE, "+34688689414", Nationality.ES, "Zarautz", new Date(), "images/profilepic/palmera.png", true);
+			User u2 = new User("bbb", "bbb", "JonAnder", "Beroz", "testemail2@gmail.com", "testaddr", Gender.MALE, "+346478646", Nationality.ES, "Hondarribi", new Date(), "images/profilepic/smiley.png", true);
+			User u3 = new User("ccc", "bbb", "Asad", "Hayat", "testemail3@gmail.com","testaddr", Gender.MALE, "+347543734", Nationality.ES, "Donostia", new Date(), "images/profilepic/smiley.png", true);
+			User u4 = new User("a", "a", "a", "a", "a@gmail.com","testaddr", Gender.MALE, "+111111111", Nationality.CI, "a", new Date(), "images/profilepic/smiley.png", false);
+			User u5 = new User("b", "b", "b", "b", "b@gmail.com","testaddr", Gender.FEMALE, "+222222222", Nationality.MA, "b", new Date(), "images/profilepic/smiley.png", false);
+			User u6 = new User("Virus", "aaaaaaaa", "Corona", "Virus","cvirus@gmail.com","testaddr", Gender.MALE, "+666666666", Nationality.ES, "London", new Date(), "images/profilepic/cvirus.png", false);
+			User u7 = new User("Lemon", "12345678", "Yellow", "Lemon","ylemon@yahoo.es","testaddr", Gender.FEMALE, "+444444444", Nationality.ES, "Lima", new Date(), "images/profilepic/smiley.png", false);
+			User u8 = new User("George11", "bbb", "George", "Washington","gwash@gg.gg","testaddr", Gender.MALE, "+7777777777", Nationality.ES, "Washington DC", new Date(), "images/profilepic/smiley.png", false);
+			User u9 = new User("Dog", "dddddddd", "Im", "Dog", "doggie@gmail.com","testaddr", Gender.MALE, "+88888888", Nationality.ES, "Boston", new Date(), "images/profilepic/smiley.png", false);
+			User u10 = new User("Maria", "aaffgghh", "Maria", "Ardilla", "marie123@gmail.com","testaddr", Gender.FEMALE, "+99999999", Nationality.AR, "Buenos Aires", new Date(), "images/profilepic/smiley.png", false);
+			User u11 = new User("xx", "xx", "xx", "xx", "xx@gmail.com","testaddr", Gender.MALE, "+25262662", Nationality.MX, "Donostia", new Date(), "images/profilepic/smiley.png", false);
+			User u12 = new User("ggwp", "gggggggg", "gg", "wp", "ggwp@gmail.com","testaddr", Gender.FEMALE, "+364586838", Nationality.MA, "Cancun", new Date(), "images/profilepic/smiley.png", false);
+			User u13 = new User("hello", "hhhhhhh", "hello", "hello", "hello@gmail.com","testaddr", Gender.MALE, "+863121525", Nationality.JP, "Hello", new Date(), "images/profilepic/smiley.png", false);
+			User u14 = new User("r", "rrrrrrr", "r", "r", "r@gmail.com","testaddr", Gender.FEMALE, "+347543734", Nationality.RU, "Donostia", new Date(), "images/profilepic/smiley.png", false);
+			User u15 = new User("Grandpa", "bbbbbbbb", "Grandpa", "Arnold", "arnold666@gmail.com","testaddr", Gender.MALE, "+2356754216", Nationality.GE, "Donostia", new Date(), "images/profilepic/smiley.png", false);
+			User u16 = new User("Antonio", "bbb", "Antonio", "Antonia", "Antoniojk@gmail.com","testaddr", Gender.MALE, "+624246264", Nationality.ES, "Donostia", new Date(), "images/profilepic/smiley.png", false);
+			User u17 = new User("Carl", "bbb", "Carl", "B", "carlb@gmail.com","testaddr", Gender.MALE, "+113552352", Nationality.US, "Donostia", new Date(), "images/profilepic/smiley.png", false);
 			
 			
 			db.persist(u1);
@@ -299,12 +304,13 @@ public class DataAccessImplementation implements DataAccess {
 	 * @return					the newly created User object.
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
-	public User registerUser(String iD, String password, String name, String surname, String email, boolean isAdmin) throws invalidID{
-	
+	public User registerUser(String iD, String password, String name, String surname, String email, String addr, Gender g, String phn, 
+													Nationality nat,String city, Date birthdt, String pic, boolean isAdmin ) throws invalidID{
+		
 		if(db.find(User.class, iD) != null) {throw new invalidID("This ID is taken");}
 		
 		db.getTransaction().begin();
-		User u = new User(iD, password, name, surname, email, isAdmin);
+		User u = new User(iD, password, name, surname, email, addr, g, phn,nat,city,birthdt, pic, isAdmin);
 		db.persist(u);
 		db.getTransaction().commit();
 		return u;
@@ -435,9 +441,9 @@ public class DataAccessImplementation implements DataAccess {
 		System.out.println(iD + " has been updated");
 	}
 	
-	public void placeBet(Question q, User u, float amount){
+	public void placeBet(Question q, User u, float amount, int answer){
 		db.getTransaction().begin();
-		u.placeBet(q, amount);
+		u.placeBet(q, amount, answer);
 		db.merge(u);
 		db.getTransaction().commit();
 		System.out.println("Bet placed sucessfully");

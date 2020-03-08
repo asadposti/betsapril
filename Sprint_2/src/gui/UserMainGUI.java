@@ -9,21 +9,16 @@ import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
-import domain.Event;
 import domain.User;
 import businessLogic.BLFacade;
-
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Vector;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
@@ -34,8 +29,6 @@ import java.awt.Insets;
 public class UserMainGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-
-	private User user; //logged user
 	
 	private JPanel jContentPane = null;
 	private JButton jButtonCheckProfile = null;
@@ -67,11 +60,10 @@ public class UserMainGUI extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public UserMainGUI(User u) {
+	public UserMainGUI() {
 		super();
-		this.user = u;
-		getIDLabel().setText(u.getID());
-		getIncomeLabel().setText(u.getCash() + "€");
+		getIDLabel().setText(UserLoginGUI.getLoggedUser().getID());
+		getIncomeLabel().setText(UserLoginGUI.getLoggedUser().getCash() + "€");
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -212,9 +204,9 @@ public class UserMainGUI extends JFrame {
 				jButtonCheckProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("CheckProfile"));
 				jButtonCheckProfile.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
-						BLFacade facade=MainGUI.getBusinessLogic();
+						//BLFacade facade=MainGUI.getBusinessLogic();
 						//Vector<Event> events=facade.getAllEvents();
-						JDialog a = new UserProfileGUI(user);
+						JDialog a = new UserProfileGUI();
 						a.setVisible(true);
 					}
 				});
@@ -235,9 +227,10 @@ public class UserMainGUI extends JFrame {
 			jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("QueryQueries")); //$NON-NLS-1$ //$NON-NLS-2$
 			jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JDialog a = new UserFindQuestionsGUI(user);
-					a.setVisible(true);
-					incomeLabel.setText(user.getCash()+"€");
+					dispose();
+					JDialog a = new FindQuestionsGUI();
+					a.setVisible(true);	
+					incomeLabel.setText(UserLoginGUI.getLoggedUser().getCash()+"€");
 				}
 			});
 		}
@@ -307,6 +300,7 @@ public class UserMainGUI extends JFrame {
 			btnLogOut = new JButton(ResourceBundle.getBundle("Etiquetas").getString("LogOut")); //$NON-NLS-1$ //$NON-NLS-2$
 			btnLogOut.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					UserLoginGUI.setLoggedUser(null);
 					JFrame user = new MainGUI();
 					user.setVisible(true);
 					dispose();

@@ -12,6 +12,8 @@ import javax.persistence.TypedQuery;
 
 import configuration.UtilDate;
 import domain.Event;
+import domain.Gender;
+import domain.Nationality;
 import domain.Question;
 import domain.User;
 import exceptions.QuestionAlreadyExist;
@@ -63,8 +65,8 @@ public interface DataAccess {
 	 * @return					the newly created User object.
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
-	public User registerUser(String iD, String password, String name, String surname, String email, boolean isAdmin) throws invalidID;
-	
+	public User registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
+													Nationality nat,String city, Date birthdDate, String pic, boolean isAdmin) throws invalidID;
 	/**
 	 * This methods checks the validity of the credentials (id / password) inputed upon login.
 	 * @param ID			ID of the presumed user.
@@ -109,7 +111,7 @@ public interface DataAccess {
 	 * @param u
 	 * @param amount
 	 */
-	public void placeBet(Question q, User u, float amount);
+	public void placeBet(Question q, User u, float amount, int answer);
 	
 	public void close();
 

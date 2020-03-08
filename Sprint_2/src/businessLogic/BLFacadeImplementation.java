@@ -14,6 +14,8 @@ import dataAccess.DataAccessImplementation;
 import domain.Question;
 import domain.User;
 import domain.Event;
+import domain.Gender;
+import domain.Nationality;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
 import exceptions.QuestionAlreadyExist;
@@ -111,11 +113,13 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
 	@WebMethod
-	public User registerUser(String iD, String password, String name, String surname, String email, boolean isAdmin) throws invalidID{
+	public User registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
+			Nationality nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID{
+	
 		DataAccess dBManager=new DataAccessImplementation();
 	    User u = null;
 	    try {
-	    	u = dBManager.registerUser(iD, password, name, surname, email, isAdmin);
+	    	u = dBManager.registerUser(iD, password, name, surname, email, address, g, phone, nat, city, birthDate, pic, isAdmin);
 	    	dBManager.close();
 	    	return u;
 	    }
@@ -201,14 +205,14 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 
-	@Override
-	public void placeBet(Question q, User u, float amount) throws InsufficientCash{
+	@Override 
+	public void placeBet(Question q, User u, float amount, int answer) throws InsufficientCash{
 		if(amount > u.getCash()) {
 			throw new InsufficientCash();
 		}
 		else {
 			DataAccessImplementation dbManager=new DataAccessImplementation();
-			dbManager.placeBet(q, u, amount);
+			dbManager.placeBet(q, u, amount, answer);
 			dbManager.close();
 		}
 		

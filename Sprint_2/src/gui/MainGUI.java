@@ -8,30 +8,15 @@ import javax.imageio.ImageIO;
 
 
 import javax.swing.*;
-
-import domain.Event;
-import domain.Question;
-import domain.User;
-import exceptions.EventFinished;
-import exceptions.QuestionAlreadyExist;
-import exceptions.invalidID;
-import exceptions.invalidPW;
 import businessLogic.BLFacade;
-import businessLogic.BLFacadeImplementation;
-
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Vector;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
@@ -70,7 +55,7 @@ public class MainGUI extends JFrame {
 	 */
 	public MainGUI() {
 		super();
-		this.setResizable(false);
+		this.setResizable(true);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -178,8 +163,8 @@ public class MainGUI extends JFrame {
 			jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					JDialog a = new FindQuestionsGUI();
-
 					a.setVisible(true);
+					dispose();
 				}
 			});
 		}

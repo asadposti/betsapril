@@ -25,15 +25,18 @@ public class Bet {
 	private Integer betNumber;
 	private Question question;
 	private float amount;
+	private int answer;
+	
 	@XmlIDREF
 	private User bettor;
 
 	
-	public Bet(Question question, User bettor, float amount) {
+	public Bet(Question question, User bettor, float amount, int answer) {
 		super();
 		this.question = question;
 		this.bettor = bettor;
 		this.amount = amount;
+		this.answer = answer;
 	}
 
 	public Question getQuestion() {
@@ -60,5 +63,11 @@ public class Bet {
 		this.amount = amount;
 	}
 	
+	public int getAnwer() {
+		return answer;
+	}
 	
+	public void setAnswer(int answer) {
+		this.answer = answer;
+	}
 }

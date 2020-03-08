@@ -79,18 +79,18 @@ public enum Nationality {
 	SA ("Saudi Arabia"), 
 	SE ("Sweden"), 
 	SG ("Singapore "),
-	SI ("Slovenia "),
-	SK ("Slovakia "),
-	SM ("San Marino "),
-	SU ("Soviet Union "),
-	TH ("Thailand "),
-	TU ("Turkey "),
-	TW ("Taiwan "),
-	TZ ("Tanzania "),
-	UA ("Ukraine "),
-	UG ("Uganda "),
+	SI ("Slovenia"),
+	SK ("Slovakia"),
+	SM ("San Marino"),
+	SU ("Soviet Union"),
+	TH ("Thailand"),
+	TU ("Turkey"),
+	TW ("Taiwan"),
+	TZ ("Tanzania"),
+	UA ("Ukraine"),
+	UG ("Uganda"),
 	US ("United States"), 
-	UY ("Uruguay "),
+	UY ("Uruguay"),
 	VE ("Venezuela"), 
 	YU ("Yugoslavia"), 
 	ZA ("South Africa"), 
@@ -105,6 +105,15 @@ public enum Nationality {
 
 	public String getString() {
 		return asString;
+	}
+	
+	public static String[] namesArray() {
+		Nationality[] values = Nationality.values();
+		String[] nameArray = new String[values.length];
+		for(Nationality n : values) {
+			nameArray[n.ordinal()] = n.asString + ", " + n;
+		}
+		return nameArray;
 	}
 
 }

@@ -1,5 +1,6 @@
 package domain;
 
+
 public enum Gender {
 	MALE("Male"), FEMALE("Female");
 	
