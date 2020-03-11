@@ -1,5 +1,6 @@
 package businessLogic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -51,7 +52,7 @@ public class BLFacadeImplementation  implements BLFacade {
  	 * @throws QuestionAlreadyExist if the same question already exists for the event
 	 */
    @WebMethod
-   public Question createQuestion(Event event, String question, float betMinimum) throws EventFinished, QuestionAlreadyExist{
+   public Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws EventFinished, QuestionAlreadyExist{
 	   
 	    //The minimum bed must be greater than 0
 	   DataAccess dBManager=new DataAccessImplementation();	    
@@ -60,7 +61,7 @@ public class BLFacadeImplementation  implements BLFacade {
 			throw new EventFinished(ResourceBundle.getBundle("Etiquetas").getString("ErrorEventHasFinished"));
 		}	
 		try {
-			Question qry=dBManager.createQuestion(event,question,betMinimum);	
+			Question qry=dBManager.createQuestion(event,question,betMinimum, answers, odds);	
 			dBManager.close();
 			return qry;
 		}

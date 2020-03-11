@@ -35,7 +35,7 @@ public interface DataAccess {
 	 * @return the created question, or null, or an exception
  	 * @throws QuestionAlreadyExist if the same question already exists for the event
 	 */
-	public Question createQuestion(Event event, String question, float betMinimum) throws  QuestionAlreadyExist;
+	public Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws  QuestionAlreadyExist;
 	
 	/**
 	 * This method retrieves from the database the events of a given date 

@@ -36,8 +36,15 @@ public class CreateQuestionGUI extends JDialog {
 	private JButton jButtonClose = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Close"));
 	private JLabel jLabelMsg = new JLabel();
 	private JLabel jLabelError = new JLabel();
+	private final JTextField answerTextField = new JTextField();
+	private JTextField textField;
+	private int count = 0;
+	private ArrayList<String> AnswerList = new ArrayList<String>();
+	private ArrayList<Float> OddLsit = new ArrayList<Float>();
+	
 
 	public CreateQuestionGUI(Vector<domain.Event> v) {
+
 		try {
 			jbInit(v);
 		} catch (Exception e) {
@@ -49,7 +56,7 @@ public class CreateQuestionGUI extends JDialog {
 
 		this.setModal(true);
 		this.getContentPane().setLayout(null);
-		this.setSize(new Dimension(604, 370));
+		this.setSize(new Dimension(604, 470));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("CreateQuery"));
 
 		jComboBoxEvents.setModel(modelEvents);
@@ -57,20 +64,20 @@ public class CreateQuestionGUI extends JDialog {
 		jLabelListOfEvents.setBounds(new Rectangle(290, 18, 277, 20));
 		jLabelQuery.setBounds(new Rectangle(25, 211, 75, 20));
 		jTextFieldQuery.setBounds(new Rectangle(100, 211, 429, 20));
-		jLabelMinBet.setBounds(new Rectangle(25, 243, 75, 20));
-		jTextFieldPrice.setBounds(new Rectangle(100, 243, 60, 20));
+		jLabelMinBet.setBounds(new Rectangle(25, 359, 75, 20));
+		jTextFieldPrice.setBounds(new Rectangle(100, 359, 60, 20));
 
 		jCalendar.setBounds(new Rectangle(40, 50, 225, 150));
 		scrollPaneEvents.setBounds(new Rectangle(25, 44, 346, 116));
 
-		jButtonCreate.setBounds(new Rectangle(100, 275, 130, 30));
+		jButtonCreate.setBounds(new Rectangle(100, 390, 130, 30));
 
 		jButtonCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jButtonCreate_actionPerformed(e);
 			}
 		});
-		jButtonClose.setBounds(new Rectangle(275, 275, 130, 30));
+		jButtonClose.setBounds(new Rectangle(263, 390, 130, 30));
 		jButtonClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jButtonClose_actionPerformed(e);
@@ -81,9 +88,13 @@ public class CreateQuestionGUI extends JDialog {
 		jLabelMsg.setForeground(Color.red);
 		// jLabelMsg.setSize(new Dimension(305, 20));
 
-		jLabelError.setBounds(new Rectangle(175, 240, 305, 20));
+		jLabelError.setBounds(new Rectangle(196, 322, 371, 30));
 		jLabelError.setForeground(Color.red);
 
+		
+		answerTextField.setBounds(100, 254, 299, 20);
+		answerTextField.setColumns(10);
+		
 		this.getContentPane().add(jLabelMsg, null);
 		this.getContentPane().add(jLabelError, null);
 
@@ -102,7 +113,46 @@ public class CreateQuestionGUI extends JDialog {
 		jLabelEventDate.setBounds(new Rectangle(40, 15, 140, 25));
 		jLabelEventDate.setBounds(40, 16, 140, 25);
 		getContentPane().add(jLabelEventDate);
+		
+		JLabel answerLabel = new JLabel("Answer"); //$NON-NLS-1$ //$NON-NLS-2$
+		answerLabel.setBounds(25, 254, 75, 20);
+		getContentPane().add(answerLabel);
+		
+	
 
+		
+		JLabel oddLabel = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("CreateQuestionGUI.oddLabel.text")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-2$
+		oddLabel.setBounds(25, 304, 75, 20);
+		getContentPane().add(oddLabel);
+		
+		getContentPane().add(answerTextField);
+		
+		textField = new JTextField();
+		textField.setBounds(100, 304, 86, 20);
+		getContentPane().add(textField);
+		textField.setColumns(10);
+
+		JButton answerButton = new JButton(ResourceBundle.getBundle("Etiquetas").getString("CreateQuestionGUI.btnNewButton.text")); //$NON-NLS-1$ //$NON-NLS-2$
+		answerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (answerLabel.getText().equals("") || textField.getText().equals("") ) {
+					jLabelError.setText("Please enter an answer and an odd in order to submit it");
+				}else if(Float.parseFloat(textField.getText()) < 1) {
+					jLabelError.setText("Please enter a valid odd");
+			    }else {
+					count++;
+					String answer = answerTextField.getText();
+					float odd = Float.parseFloat(textField.getText());
+					AnswerList.add(answer);
+					OddLsit.add(odd);
+					jLabelError.setText("Answer added successfully");
+					answerTextField.setText("");
+					textField.setText("");
+				}
+			}
+		});
+		answerButton.setBounds(409, 253, 120, 23);
+		getContentPane().add(answerButton);
 		// Code for JCalendar
 		this.jCalendar.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent propertychangeevent) {
@@ -257,20 +307,25 @@ public class CreateQuestionGUI extends JDialog {
 			String inputQuery = jTextFieldQuery.getText(); 
 
 			if (inputQuery.length() > 0) {
-
-				// It could be to trigger an exception if the introduced string is not a number
-				float inputPrice = Float.parseFloat(jTextFieldPrice.getText());
-
-				if (inputPrice <= 0)
-					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ErrorNumber"));
-				else {
-
-					// Obtain the business logic from a StartWindow class (local or remote)
-					BLFacade facade = MainGUI.getBusinessLogic();
-
-					facade.createQuestion(event, inputQuery, inputPrice);
-
-					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("QueryCreated"));
+				if (count < 2) {
+					jLabelError.setText("Pls enter at least 1 answer for the question");
+				}else {
+					// It could be to trigger an exception if the introduced string is not a number
+					float inputPrice = Float.parseFloat(jTextFieldPrice.getText());
+					if (inputPrice <= 0)
+						jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ErrorNumber"));
+					else {
+	
+						// Obtain the business logic from a StartWindow class (local or remote)
+						BLFacade facade = MainGUI.getBusinessLogic();
+	
+						facade.createQuestion(event, inputQuery, inputPrice, AnswerList, OddLsit);
+	
+						jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("QueryCreated"));
+						
+						OddLsit.clear();
+						AnswerList.clear();
+					}
 				}
 			} else
 				jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ErrorQuery"));

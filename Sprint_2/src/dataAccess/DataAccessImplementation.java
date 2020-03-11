@@ -233,7 +233,7 @@ public class DataAccessImplementation implements DataAccess {
 	 * @return the created question, or null, or an exception
  	 * @throws QuestionAlreadyExist if the same question already exists for the event
 	 */
-	public Question createQuestion(Event event, String question, float betMinimum) throws  QuestionAlreadyExist {
+	public Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws  QuestionAlreadyExist {
 		System.out.println(">> DataAccess: createQuestion=> event= "+event+" question= "+question+" betMinimum="+betMinimum);
 		
 			Event ev = db.find(Event.class, event.getEventNumber());
@@ -242,6 +242,8 @@ public class DataAccessImplementation implements DataAccess {
 			
 			db.getTransaction().begin();
 			Question q = ev.addQuestion(question, betMinimum);
+			q.setAnswer(answers);
+			q.setOdds(odds);
 			//db.persist(q);
 			db.persist(ev); // db.persist(q) not required when CascadeType.PERSIST is added in questions property of Event class
 							// @OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)

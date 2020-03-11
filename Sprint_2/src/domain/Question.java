@@ -1,6 +1,8 @@
 package domain;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.persistence.*;
@@ -25,8 +27,8 @@ public class Question implements Serializable {
 	@XmlIDREF
 	private Event event;
 	
-	private String[] answers;
-	private int[] odds;
+	private ArrayList<String> answers;
+	private ArrayList<Float> odds;
 	
 
 	public Question(){
@@ -165,7 +167,7 @@ public class Question implements Serializable {
 	 * @return the associated answers
 	 */
 	
-	public String[] getAnswers() {
+	public ArrayList<String> getAnswers() {
 		return answers;
 	}
 
@@ -175,13 +177,20 @@ public class Question implements Serializable {
 	 * 
 	 * @param answers to associate to the question
 	 */
-	public void setAnswer(String answer, int i) {
-		this.answers[i] = answer;
+	public void setAnswer(ArrayList<String> answers) {
+		this.answers =answers;
 	}
 
 
 	public String toString(){
 		return questionNumber+";"+question+";"+Float.toString(betMinimum);
+	}
+
+
+
+	public void setOdds(ArrayList<Float> odds) {
+		// TODO Auto-generated method stub
+		this.odds =  odds;
 	}
 
 
