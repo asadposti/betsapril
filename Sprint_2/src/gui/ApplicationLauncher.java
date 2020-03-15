@@ -65,19 +65,16 @@ public class ApplicationLauncher {
 			/*if (c.getDataBaseOpenMode().equals("initialize")) 
 				appFacadeInterface.initializeBD();
 				*/
+			
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
-		
-
-			
+					
 		}catch (Exception e) {
-			a.jLabelSelectOption.setText("Error: "+e.toString());
-			a.jLabelSelectOption.setForeground(Color.RED);		
+			//a.jLabelSelectOption.setText("Error: "+e.toString());
+			//a.jLabelSelectOption.setForeground(Color.RED);		
 			System.out.println("Error in ApplicationLauncher: "+e.toString());
 		}
 		//a.pack();
-
-
 	}
 
 }

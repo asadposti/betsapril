@@ -14,9 +14,11 @@ import dataAccess.DataAccess;
 import dataAccess.DataAccessImplementation;
 import domain.Question;
 import domain.User;
+import domain.Bet;
 import domain.Event;
 import domain.Gender;
 import domain.Nationality;
+import domain.Profile;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
 import exceptions.QuestionAlreadyExist;
@@ -29,6 +31,10 @@ import exceptions.invalidPW;
 @WebService(endpointInterface = "businessLogic.BLFacade")
 public class BLFacadeImplementation  implements BLFacade {
 
+	private User loggeduser;
+	private Date sessionstart;
+	
+	
 	public BLFacadeImplementation()  {		
 		System.out.println("Creating BLFacadeImplementation instance");
 		ConfigXML c=ConfigXML.getInstance();
@@ -110,19 +116,16 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @param email				email of the new user.
 	 * @param isAdmin			whether this user has admin. privileges or not.
 	 * 
-	 * @return					the newly created User object.
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
 	@WebMethod
-	public User registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
+	public void registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
 			Nationality nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID{
 	
 		DataAccess dBManager=new DataAccessImplementation();
-	    User u = null;
 	    try {
-	    	u = dBManager.registerUser(iD, password, name, surname, email, address, g, phone, nat, city, birthDate, pic, isAdmin);
+	    	dBManager.registerUser(iD, password, name, surname, email, address, g, phone, nat, city, birthDate, pic, isAdmin);
 	    	dBManager.close();
-	    	return u;
 	    }
 	    catch (invalidID i) {
 		    dBManager.close();
@@ -135,16 +138,17 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @param ID			ID of the presumed user.
 	 * @param pw			password of the presumed user.
 	 * 
-	 * @return				int indicating privilege level of the user( 0: Regular user, 1: Admin, -1: Invalid credentials).
+	 * @return				boolean indicating privilege level of the user( true:Admin , false:Regular user).
 	 * @throws invalidID	exception thrown when no user entity with the input ID exists in the database.
 	 */
 	@WebMethod
-	public User checkCredentials(String ID, String password) throws invalidID, invalidPW{
+	public boolean checkCredentials(String ID, String password) throws invalidID, invalidPW{
 		DataAccess dBManager=new DataAccessImplementation();
 	    try {
-	    	User u = dBManager.checkCredentials(ID, password);
+	    	User u = dBManager.retrieveUser(ID, password);
 	    	dBManager.close();
-	    	return u;
+	    	loggeduser = u;
+	    	return u.isAdmin();
 	    }	
 	    catch (invalidID e) {
 	    	dBManager.close();
@@ -206,27 +210,68 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 
-	@Override 
-	public void placeBet(Question q, User u, float amount, int answer) throws InsufficientCash{
-		if(amount > u.getCash()) {
+	public void placeBet(Question q, String ID, float amount, int answer) throws InsufficientCash{
+		if(amount > loggeduser.getProfile().getCash()) {
 			throw new InsufficientCash();
 		}
 		else {
 			DataAccessImplementation dbManager=new DataAccessImplementation();
-			dbManager.placeBet(q, u, amount, answer);
+			dbManager.recordBet(q, ID, amount, answer);
 			dbManager.close();
 		}
 		
 	}
 
+	/**
+	 * This method checks if a user is currently logged in
+	 * @return    boolean(true: if a user is logged in, false: else)
+	 */
+	public boolean isLoggedIn() {
+		return (loggeduser != null);
+	}
 
+	/**
+	 * Retrieves the bets the currently logged user has in place
+	 * @return		List<Bet> user's bets
+	 */
+	public List<Bet> retrieveBets(){
+			return loggeduser.getBets();
+	}
 
+	/**
+	 * Logs the current user out by setting the attributes related to the current session to null
+	 */
+	public void logOut() {
+		loggeduser = null;
+		sessionstart = null;
+	}
 
-
-
-
-
-
-
+	/**
+	 * Retrieves the profile of the currently logged user
+	 * @return	Profile object containing information about the user
+	 */
+	public Profile getProfile() {
+		return loggeduser.getProfile();
+	}
+	
+	/**
+	 * Indicates if the logged user has an admin status.
+	 * @return	boolean(true: if loggeduser is an admin, false:else)
+	 */
+	public boolean isAdmin() {
+		return loggeduser.isAdmin();
+	}
+	
+	/**
+	 * Adds introduced amount the cash stored on the user's account
+	 * @param amount	amount of money to add(float)
+	 * @return	cash on the account after the addition
+	 */
+	public float addCash(float amount) {
+		DataAccessImplementation dbManager=new DataAccessImplementation();
+		float newcash = dbManager.addCash(loggeduser.getID(), amount);
+		dbManager.close();
+		return newcash;
+	}
 }
 

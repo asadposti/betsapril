@@ -28,6 +28,7 @@ import domain.Bet;
 import domain.Event;
 import domain.Gender;
 import domain.Nationality;
+import domain.Profile;
 import domain.Question;
 import domain.User;
 import exceptions.EventFinished;
@@ -149,24 +150,41 @@ public class DataAccessImplementation implements DataAccess {
 				
 			}
 			
+			Profile p1 = new Profile("aaa" , "Julen", "Urroz", "testemail@gmail.com", "testaddr", Gender.MALE, "+34688689414", Nationality.ES, "Zarautz", new Date(), "images/profilepic/palmera.png");
+			Profile p2 = new Profile("bbb","JonAnder", "Beroz", "testemail2@gmail.com", "testaddr", Gender.MALE, "+346478646", Nationality.ES, "Hondarribi", new Date(), "images/profilepic/smiley.png");
+			Profile p3 = new Profile("ccc","Asad", "Hayat", "testemail3@gmail.com","testaddr", Gender.MALE, "+347543734", Nationality.ES, "Donostia", new Date(), "images/profilepic/smiley.png");
+			Profile p4 = new Profile("a","a", "a", "a@gmail.com","testaddr", Gender.MALE, "+111111111", Nationality.CI, "a", new Date(), "images/profilepic/smiley.png");	
+			Profile p5 = new Profile("b","b", "b", "b@gmail.com","testaddr", Gender.FEMALE, "+222222222", Nationality.MA, "b", new Date(), "images/profilepic/smiley.png");
+			Profile p6 = new Profile("Virus","Corona", "Virus","cvirus@gmail.com","testaddr", Gender.MALE, "+666666666", Nationality.ES, "London", new Date(), "images/profilepic/cvirus.png");
+			Profile p7 = new Profile("Lemon","Yellow", "Lemon","ylemon@yahoo.es","testaddr", Gender.FEMALE, "+444444444", Nationality.ES, "Lima", new Date(), "images/profilepic/smiley.png");
+			Profile p8 = new Profile("George11","George", "Washington","gwash@gg.gg","testaddr", Gender.MALE, "+7777777777", Nationality.ES, "Washington DC", new Date(), "images/profilepic/smiley.png");
+			Profile p9 = new Profile ("Dog", "Im", "Dog", "doggie@gmail.com","testaddr", Gender.MALE, "+88888888", Nationality.ES, "Boston", new Date(), "images/profilepic/smiley.png");
+			Profile p10 = new Profile ("Maria","Maria", "Ardilla", "marie123@gmail.com","testaddr", Gender.FEMALE, "+99999999", Nationality.AR, "Buenos Aires", new Date(), "images/profilepic/smiley.png");
+			Profile p11 = new Profile ("xx", "xx", "xx", "xx@gmail.com","testaddr", Gender.MALE, "+25262662", Nationality.MX, "Donostia", new Date(), "images/profilepic/smiley.png");
+			Profile p12 = new Profile ("ggwp", "gg", "wp", "ggwp@gmail.com","testaddr", Gender.FEMALE, "+364586838", Nationality.MA, "Cancun", new Date(), "images/profilepic/smiley.png");
+			Profile p13 = new Profile ("hello","hello", "hello", "hello@gmail.com","testaddr", Gender.MALE, "+863121525", Nationality.JP, "Hello", new Date(), "images/profilepic/smiley.png");
+			Profile p14 = new Profile ("r", "r", "r", "r@gmail.com","testaddr", Gender.FEMALE, "+347543734", Nationality.RU, "Donostia", new Date(), "images/profilepic/smiley.png");
+			Profile p15 = new Profile ("Grandpa", "Grandpa", "Arnold", "arnold666@gmail.com","testaddr", Gender.MALE, "+2356754216", Nationality.GE, "Donostia", new Date(), "images/profilepic/smiley.png");
+			Profile p16 = new Profile ("Antonio","Antonio", "Antonia", "Antoniojk@gmail.com","testaddr", Gender.MALE, "+624246264", Nationality.ES, "Donostia", new Date(), "images/profilepic/smiley.png");
+			Profile p17 = new Profile ("Carl","Carl", "B", "carlb@gmail.com","testaddr", Gender.MALE, "+113552352", Nationality.US, "Donostia", new Date(), "images/profilepic/smiley.png");
 			
-			User u1 = new User("aaa", "bbb", "Julen", "Urroz", "testemail@gmail.com", "testaddr", Gender.MALE, "+34688689414", Nationality.ES, "Zarautz", new Date(), "images/profilepic/palmera.png", true);
-			User u2 = new User("bbb", "bbb", "JonAnder", "Beroz", "testemail2@gmail.com", "testaddr", Gender.MALE, "+346478646", Nationality.ES, "Hondarribi", new Date(), "images/profilepic/smiley.png", true);
-			User u3 = new User("ccc", "bbb", "Asad", "Hayat", "testemail3@gmail.com","testaddr", Gender.MALE, "+347543734", Nationality.ES, "Donostia", new Date(), "images/profilepic/smiley.png", true);
-			User u4 = new User("a", "a", "a", "a", "a@gmail.com","testaddr", Gender.MALE, "+111111111", Nationality.CI, "a", new Date(), "images/profilepic/smiley.png", false);
-			User u5 = new User("b", "b", "b", "b", "b@gmail.com","testaddr", Gender.FEMALE, "+222222222", Nationality.MA, "b", new Date(), "images/profilepic/smiley.png", false);
-			User u6 = new User("Virus", "aaaaaaaa", "Corona", "Virus","cvirus@gmail.com","testaddr", Gender.MALE, "+666666666", Nationality.ES, "London", new Date(), "images/profilepic/cvirus.png", false);
-			User u7 = new User("Lemon", "12345678", "Yellow", "Lemon","ylemon@yahoo.es","testaddr", Gender.FEMALE, "+444444444", Nationality.ES, "Lima", new Date(), "images/profilepic/smiley.png", false);
-			User u8 = new User("George11", "bbb", "George", "Washington","gwash@gg.gg","testaddr", Gender.MALE, "+7777777777", Nationality.ES, "Washington DC", new Date(), "images/profilepic/smiley.png", false);
-			User u9 = new User("Dog", "dddddddd", "Im", "Dog", "doggie@gmail.com","testaddr", Gender.MALE, "+88888888", Nationality.ES, "Boston", new Date(), "images/profilepic/smiley.png", false);
-			User u10 = new User("Maria", "aaffgghh", "Maria", "Ardilla", "marie123@gmail.com","testaddr", Gender.FEMALE, "+99999999", Nationality.AR, "Buenos Aires", new Date(), "images/profilepic/smiley.png", false);
-			User u11 = new User("xx", "xx", "xx", "xx", "xx@gmail.com","testaddr", Gender.MALE, "+25262662", Nationality.MX, "Donostia", new Date(), "images/profilepic/smiley.png", false);
-			User u12 = new User("ggwp", "gggggggg", "gg", "wp", "ggwp@gmail.com","testaddr", Gender.FEMALE, "+364586838", Nationality.MA, "Cancun", new Date(), "images/profilepic/smiley.png", false);
-			User u13 = new User("hello", "hhhhhhh", "hello", "hello", "hello@gmail.com","testaddr", Gender.MALE, "+863121525", Nationality.JP, "Hello", new Date(), "images/profilepic/smiley.png", false);
-			User u14 = new User("r", "rrrrrrr", "r", "r", "r@gmail.com","testaddr", Gender.FEMALE, "+347543734", Nationality.RU, "Donostia", new Date(), "images/profilepic/smiley.png", false);
-			User u15 = new User("Grandpa", "bbbbbbbb", "Grandpa", "Arnold", "arnold666@gmail.com","testaddr", Gender.MALE, "+2356754216", Nationality.GE, "Donostia", new Date(), "images/profilepic/smiley.png", false);
-			User u16 = new User("Antonio", "bbb", "Antonio", "Antonia", "Antoniojk@gmail.com","testaddr", Gender.MALE, "+624246264", Nationality.ES, "Donostia", new Date(), "images/profilepic/smiley.png", false);
-			User u17 = new User("Carl", "bbb", "Carl", "B", "carlb@gmail.com","testaddr", Gender.MALE, "+113552352", Nationality.US, "Donostia", new Date(), "images/profilepic/smiley.png", false);
+			User u1 = new User("aaa", "bbb", true, p1);
+			User u2 = new User("bbb", "bbb", true, p2);
+			User u3 = new User("ccc", "bbb", true, p3);
+			User u4 = new User("a", "a", false, p4);
+			User u5 = new User("b", "b", false, p5);
+			User u6 = new User("Virus", "aaaaaaaa", false, p6);
+			User u7 = new User("Lemon", "12345678", false, p7);
+			User u8 = new User("George11", "bbb", false, p8);
+			User u9 = new User("Dog", "dddddddd", false, p9);
+			User u10 = new User("Maria", "aaffgghh", false,p10);
+			User u11 = new User("xx", "xx", false, p11);
+			User u12 = new User("ggwp", "gggggggg", false,p12);
+			User u13 = new User("hello", "hhhhhhh", false, p13);
+			User u14 = new User("r", "rrrrrrr", false, p14);
+			User u15 = new User("Grandpa", "bbbbbbbb", false,p15);
+			User u16 = new User("Antonio", "bbb", false, p16);
+			User u17 = new User("Carl", "bbb", false, p17);
 			
 			
 			db.persist(u1);
@@ -312,8 +330,10 @@ public class DataAccessImplementation implements DataAccess {
 		if(db.find(User.class, iD) != null) {throw new invalidID("This ID is taken");}
 		
 		db.getTransaction().begin();
-		User u = new User(iD, password, name, surname, email, addr, g, phn,nat,city,birthdt, pic, isAdmin);
+		Profile p = new Profile(iD, name, surname, email, addr, g, phn, nat, city, birthdt, pic);
+		User u = new User(iD, password,isAdmin, p);
 		db.persist(u);
+		db.persist(p);
 		db.getTransaction().commit();
 		return u;
 		
@@ -324,10 +344,10 @@ public class DataAccessImplementation implements DataAccess {
 	 * @param ID			ID of the presumed user.
 	 * @param pw			password of the presumed user.
 	 * 
-	 * @return				int indicating privilege level of the user( 0: Regular user, 1:Admin, -1:Invalid credentials)
+	 * @return				boolean indicating privilege level of the user( true:Admin, false:Regular user)
 	 * @throws invalidID	exception thrown when no user entity with the input ID exists in the database.
 	 */
-	public User checkCredentials(String ID, String pw) throws invalidID, invalidPW {
+	public User retrieveUser(String ID, String pw) throws invalidID, invalidPW {
 		User u = db.find(User.class, ID);
 		if(u == null) {
 			throw new invalidID("ID does not correspond to a registered user");
@@ -336,6 +356,7 @@ public class DataAccessImplementation implements DataAccess {
 			throw new invalidPW("Incorrect password");
 		}
 		else{
+
 			return u;
 		}
 	}
@@ -413,7 +434,8 @@ public class DataAccessImplementation implements DataAccess {
 	 * @param email
 	 * @param isAdmin
 	 */
-	public void updateUserInfo(String key, String iD, String name, String surname, String email, boolean isAdmin) throws invalidID{
+	public void updateUserInfo(String key, String iD, String name, String surname, String email, String addr, Gender g,
+										String phn, Nationality nat,String city, Date birthdt, boolean isAdmin) throws invalidID{
 		
 		User u = db.find(User.class, iD);
 		//check if there is an existing user for the new ID
@@ -426,7 +448,8 @@ public class DataAccessImplementation implements DataAccess {
 				db.getTransaction().begin();
 				TypedQuery<User> query = db.createQuery("DELETE FROM User u WHERE u.ID = \"" + key + "\"", User.class);
 				query.executeUpdate();
-				User w = new User(iD,u.getPassword(),name,surname,email,isAdmin);
+				Profile p = new Profile(iD,name,surname,email, addr, g, phn, nat, city, birthdt);	
+				User w = new User(iD,u.getPassword(),isAdmin,p);
 				db.persist(w);
 				db.getTransaction().commit();
 			}
@@ -434,18 +457,19 @@ public class DataAccessImplementation implements DataAccess {
 		else {
 			u = db.find(User.class, key);
 			db.getTransaction().begin();
-			u.setName(name);
-			u.setSurname(surname);
-			u.setEmail(email);
+			u.getProfile().setName(name);
+			u.getProfile().setSurname(surname);
+			u.getProfile().setEmail(email);
 			u.setAdmin(isAdmin);
 			db.getTransaction().commit();
 		}
 		System.out.println(iD + " has been updated");
 	}
 	
-	public void placeBet(Question q, User u, float amount, int answer){
+	public void recordBet(Question q, String ID, float amount, int answer){
+		User u = db.find(User.class, ID);
 		db.getTransaction().begin();
-		u.placeBet(q, amount, answer);
+		u.addBet(q, amount, answer);
 		db.merge(u);
 		db.getTransaction().commit();
 		System.out.println("Bet placed sucessfully");
@@ -457,8 +481,22 @@ public class DataAccessImplementation implements DataAccess {
 		System.out.println("DataBase closed");
 	}
 
-	
+	@Override
+	public void updateUserInfo(String key, String iD, String name, String surname, String email, boolean isAdmin)
+			throws invalidID {
+		// TODO Auto-generated method stub
+		
+	}
 
-
+	public float addCash(String ID, float addition) {
+		User u = db.find(User.class, ID);
+		db.getTransaction().begin();
+		Profile p = u.getProfile();
+		float updatedcash = p.getCash()+addition;
+		p.setCash(updatedcash);
+		db.getTransaction().commit();
+		System.out.println("Cash added sucessfully");	
+		return updatedcash;
+	}
 	
 }

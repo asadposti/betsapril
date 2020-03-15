@@ -1,4 +1,4 @@
-package gui;
+package gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -44,7 +44,7 @@ public class ButtonColumn extends AbstractCellEditor
 	 *  @param action the Action to be invoked when the button is invoked
 	 *  @param column the column to which the button renderer/editor is added
 	 */
-	public ButtonColumn(JTable table, Action action, int column)
+	public ButtonColumn(JTable table, Action action, int column, Color c)
 	{
 		this.table = table;
 		this.action = action;
@@ -53,9 +53,9 @@ public class ButtonColumn extends AbstractCellEditor
 		editButton = new JButton();
 		editButton.setFocusPainted( false );
 		editButton.addActionListener( this );
+		renderButton.setBackground(c);
 		originalBorder = editButton.getBorder();
 		setFocusBorder( new LineBorder(Color.BLUE) );
-
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(column).setCellRenderer( this );
 		columnModel.getColumn(column).setCellEditor( this );
@@ -137,16 +137,16 @@ public class ButtonColumn extends AbstractCellEditor
 	public Component getTableCellRendererComponent(
 		JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
-		if (isSelected)
-		{
-			renderButton.setForeground(table.getSelectionForeground());
-	 		renderButton.setBackground(table.getSelectionBackground());
-		}
-		else
-		{
-			renderButton.setForeground(table.getForeground());
-			renderButton.setBackground(UIManager.getColor("Button.background"));
-		}
+		//if (isSelected)
+		//{
+			//renderButton.setForeground(table.getSelectionForeground());
+	 		//renderButton.setBackground(table.getSelectionBackground());
+		//}
+		//else
+		//{	
+			//renderButton.setForeground(table.getForeground());
+			//renderButton.setBackground(new Color(51,51,51));
+		//}
 
 		if (hasFocus)
 		{

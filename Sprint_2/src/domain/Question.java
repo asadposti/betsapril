@@ -30,13 +30,10 @@ public class Question implements Serializable {
 	private ArrayList<String> answers;
 	private ArrayList<Float> odds;
 	
-
 	public Question(){
 		super();
 	}
 	
-	
-
 	public Question(Integer queryNumber, String query, float betMinimum, Event event) {
 		super();
 		this.questionNumber = queryNumber;

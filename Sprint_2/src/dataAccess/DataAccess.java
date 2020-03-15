@@ -72,10 +72,10 @@ public interface DataAccess {
 	 * @param ID			ID of the presumed user.
 	 * @param pw			password of the presumed user.
 	 * 
-	 * @return				int indicating privilege level of the user( 0: Regular user, 1:Admin, -1:Invalid credentials)
+	 * @return				boolean indicating privilege level of the user( true:Admin , false:Regular user)
 	 * @throws invalidID	exception thrown when no user entity with the input ID exists in the database.
 	 */
-	public User checkCredentials(String ID, String pw) throws invalidID, invalidPW ;
+	public User retrieveUser(String ID, String pw) throws invalidID, invalidPW ;
 	
 	/**
 	 * 
@@ -111,7 +111,15 @@ public interface DataAccess {
 	 * @param u
 	 * @param amount
 	 */
-	public void placeBet(Question q, User u, float amount, int answer);
+	public void recordBet(Question q, String ID, float amount, int answer); 
+	
+	 /**
+	 * Adds introduced amount the cash stored on the user's account
+	 * @param ID		ID of the user to add the cash
+	 * @param amount	amount of money to add(float)
+	 * @return			cash on the account after the addition
+	 */
+	public float addCash(String ID, float cash);
 	
 	public void close();
 

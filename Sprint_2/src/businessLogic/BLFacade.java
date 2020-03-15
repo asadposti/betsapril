@@ -8,9 +8,11 @@ import java.util.List;
 //import domain.Booking;
 import domain.Question;
 import domain.User;
+import domain.Bet;
 import domain.Event;
 import domain.Gender;
 import domain.Nationality;
+import domain.Profile;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
 import exceptions.QuestionAlreadyExist;
@@ -66,10 +68,9 @@ public interface BLFacade  {
 	 * @param email				email of the new user.
 	 * @param isAdmin			whether this user has admin. privileges or not.
 	 * 
-	 * @return					the newly created User object.
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
-	@WebMethod public User registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
+	@WebMethod public void registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
 			Nationality nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID;
 
 	/**
@@ -77,10 +78,10 @@ public interface BLFacade  {
 	 * @param ID			ID of the presumed user.
 	 * @param pw			password of the presumed user.
 	 * 
-	 * @return				int indicating privilegde level of the user( 0: Regular user, 1:Admin, -1:Invalid credentials).
+	 * @return				boolean indicating privilege level of the user( true: Admin, false:Regular user).
 	 * @throws invalidID	exception thrown when no user entity with the input ID exists in the database.
 	 */
-	@WebMethod public User checkCredentials(String ID, String password) throws invalidID, invalidPW;
+	@WebMethod public boolean checkCredentials(String ID, String password) throws invalidID, invalidPW;
 		
 	/**
 	 * 
@@ -113,7 +114,7 @@ public interface BLFacade  {
 	 * @param q
 	 * @param amount
 	 */
-	@WebMethod public void placeBet(Question q, User u, float amount, int answer)throws InsufficientCash;
+	@WebMethod public void placeBet(Question q, String ID, float amount, int answer)throws InsufficientCash;
 	
 	/**
 	 * This method calls the data access to initialize the database with some events and questions.
@@ -121,5 +122,39 @@ public interface BLFacade  {
 	 */	
 	@WebMethod public void initializeBD();
 
+	/**
+	 * This method checks if a user is currently logged in
+	 * @return    boolean(true: if a user is logged in, false: else)
+	 */
+	public boolean isLoggedIn();
 	
+	/**
+	 * Logs the current user out by setting the attributes related to the current session to null
+	 */
+	public void logOut();
+	
+	/**
+	 * Retrieves the bets the currently logged suer has in place
+	 * @return		List<Bet> user's bets
+	 */
+	public List<Bet> retrieveBets();
+	
+	/**
+	 * Retrieves the profile of the currently logged user
+	 * @return	Profile object containing information about the user
+	 */
+	public Profile getProfile();
+	
+	/**
+	 * Indicates if the logged user has an admin status.
+	 * @return	boolean(true: if loggeduser is an admin, false:else)
+	 */
+	public boolean isAdmin();
+	
+	/**
+	 * Adds introduced amount the cash stored on the user's account
+	 * @param amount	amount of money to add(float)
+	 * @return	cash on the account after the addition
+	 */
+	public float addCash(float amount);
 }
