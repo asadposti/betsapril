@@ -8960,3 +8960,191 @@ New type domain.Feedback$FeedbackType
 [2020-03-16 18:14:25 #56 store] 
 Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 10464@DESKTOP-00OS7EM
 
+------------------------------------------------------------------------------------------------------------------------
+
+[2020-03-16 18:20:51 #1 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:51 #2 type.registry] 
+New type domain.User
+
+[2020-03-16 18:20:51 #3 type] 
+Type domain.User is not enhanced.
+
+[2020-03-16 18:20:51 #4 type.registry] 
+New type domain.Bet
+
+[2020-03-16 18:20:52 #5 type.registry] 
+New type java.util.ArrayList<domain.Bet>
+
+[2020-03-16 18:20:52 #6 type.registry] 
+New type domain.Profile
+
+[2020-03-16 18:20:52 #7 type] 
+Type domain.Bet is not enhanced.
+
+[2020-03-16 18:20:52 #8 type.registry] 
+New type domain.Question
+
+[2020-03-16 18:20:52 #9 type] 
+Type domain.Profile is not enhanced.
+
+[2020-03-16 18:20:52 #10 type.registry] 
+New type domain.Nationality
+
+[2020-03-16 18:20:52 #11 type.registry] 
+New type domain.Gender
+
+[2020-03-16 18:20:52 #12 type] 
+Type domain.Question is not enhanced.
+
+[2020-03-16 18:20:52 #13 type.registry] 
+New type java.util.ArrayList<java.lang.Float>
+
+[2020-03-16 18:20:52 #14 type.registry] 
+New type java.util.ArrayList<java.lang.String>
+
+[2020-03-16 18:20:52 #15 type.registry] 
+New type domain.Event
+
+[2020-03-16 18:20:52 #16 type] 
+Type domain.Event is not enhanced.
+
+[2020-03-16 18:20:52 #17 type.registry] 
+New type java.util.Vector<domain.Question>
+
+[2020-03-16 18:20:52 #18 type.registry] 
+New type java.util.ArrayList<java.lang.Object>
+
+[2020-03-16 18:20:52 #19 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+[2020-03-16 18:20:52 #20 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:52 #21 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:52 #22 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #23 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #24 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #25 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #26 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #27 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #28 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #29 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:54 #30 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:55 #31 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:55 #32 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:55 #33 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:55 #34 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #35 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #36 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #37 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #38 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #39 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #40 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #41 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #42 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #43 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #44 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #45 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:20:56 #46 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:04 #47 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:04 #48 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:04 #49 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:04 #50 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:05 #51 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:05 #52 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:05 #53 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:05 #54 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:06 #55 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:06 #56 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:06 #57 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:06 #58 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:07 #59 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:07 #60 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:07 #61 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is opened by 11672@DESKTOP-00OS7EM
+
+[2020-03-16 18:21:07 #62 store] 
+Database 'C:\Users\Usuario\git\Sprint_2\Sprint_2\resources\bets.temp' is closed by 11672@DESKTOP-00OS7EM
+

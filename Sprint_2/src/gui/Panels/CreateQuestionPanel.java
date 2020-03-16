@@ -36,6 +36,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 
 public class CreateQuestionPanel extends JPanel {
 
@@ -68,6 +71,7 @@ public class CreateQuestionPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public CreateQuestionPanel() {
+		setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setBackground(new Color(255, 255, 255));
 		scrollPaneEvents.setBounds(new Rectangle(25, 44, 346, 116));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -95,7 +99,6 @@ public class CreateQuestionPanel extends JPanel {
 		gbc_jLabelListOfEvents.gridy = 1;
 		this.add(jLabelListOfEvents, gbc_jLabelListOfEvents);
 		jCalendar.getDayChooser().getDayPanel().setBackground(Color.WHITE);
-
 		jCalendar.setBounds(new Rectangle(40, 50, 225, 150));
 
 		GridBagConstraints gbc_jCalendar = new GridBagConstraints();
@@ -168,6 +171,7 @@ public class CreateQuestionPanel extends JPanel {
 		this.add(jLabelQuery, gbc_jLabelQuery);
 		jTextFieldQuery.setBackground(new Color(255, 255, 255));
 		jTextFieldQuery.setBounds(new Rectangle(100, 211, 429, 20));
+		
 		GridBagConstraints gbc_jTextFieldQuery = new GridBagConstraints();
 		gbc_jTextFieldQuery.gridwidth = 9;
 		gbc_jTextFieldQuery.fill = GridBagConstraints.HORIZONTAL;
@@ -206,15 +210,21 @@ public class CreateQuestionPanel extends JPanel {
 					jLabelAnswerError.setText("");
 					jLabelMsg.setText("");
 					if (answerTextField.getText().equals("") ) {
-						jLabelAnswerError.setText("Enter an anwer");	
+						jLabelAnswerError.setText("Enter an answer");
+						answerTextField.setBorder(new LineBorder(Color.RED, 2));
 					}else if(oddTextField.getText().equals("")) {
-						jLabelAnswerError.setText("Enter odd number");	
+						jLabelAnswerError.setText("Enter odd number");
+						oddTextField.setBorder(new LineBorder(Color.RED, 2));
+						answerTextField.setBorder(new LineBorder(Color.BLACK, 1));
 					}else if(Float.parseFloat(oddTextField.getText()) < 1) {
 						jLabelAnswerError.setText("Please enter a valid odd number");
+						answerTextField.setBorder(new LineBorder(Color.BLACK, 1));
 					}else {
 						count++;
 						String answer = answerTextField.getText();
 						float odd = Float.parseFloat(oddTextField.getText());
+						oddTextField.setBorder(new LineBorder(Color.RED, 1));
+						answerTextField.setBorder(new LineBorder(Color.BLACK, 1));
 						AnswerList.add(answer);
 						OddLsit.add(odd);
 						jLabelAnswerError.setText("Answer added successfully");
