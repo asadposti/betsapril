@@ -1,7 +1,14 @@
 package dataAccess;
 
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +33,8 @@ import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.Bet;
 import domain.Event;
+import domain.Feedback;
+import domain.Feedback.FeedbackType;
 import domain.Gender;
 import domain.Nationality;
 import domain.Profile;
@@ -498,5 +507,14 @@ public class DataAccessImplementation implements DataAccess {
 		System.out.println("Cash added sucessfully");	
 		return updatedcash;
 	}
+	
+	public void storeFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file) {
+		db.getTransaction().begin();
+		Feedback fb = new Feedback(fbtype, email, name, summary, details, file);
+		db.persist(fb);
+		db.getTransaction().commit();
+		System.out.println("Feedback sent sucessfully");
+	}
+	
 	
 }

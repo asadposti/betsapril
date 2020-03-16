@@ -21,7 +21,7 @@ private static final long serialVersionUID = 1L;
 	  public HintPassField(final String hint) {
 	    super(hint);
 	    this.hint = hint;
-	    this.setBackground(new Color(0,0,0));
+	    this.setOpaque(false);
 	    this.showingHint = true;
 	    this.setEchoChar((char)0);
 	    super.addFocusListener(this);

@@ -17,11 +17,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.BorderFactory;
 import gui.components.cancelLabel;
+import java.awt.FlowLayout;
 
 public class LoginGUI extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -62,26 +64,31 @@ public class LoginGUI extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 	
-		JPanel panel = new JPanel();
-		panel.setBorder(null);
-		panel.setBounds(0, 37, 545, 51);
-		panel.setBackground(new Color(0, 0, 0));
-		panel.setLayout(null);
-		contentPane.add(panel);
-
-		titleLabel = new JLabel(" Log into Bet & Ruin");
-		titleLabel.setBounds(10, 11, 525, 26);
-		panel.add(titleLabel);
-		titleLabel.setForeground(new Color(153, 153, 153));
-		titleLabel.setBackground(new Color(255, 255, 255));
-		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		titleLabel.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 24));
+			
+		JLabel logolabel = new JLabel(new ImageIcon("images/logogray.png"));
+		JPanel logoPanel = new JPanel();
+		logoPanel.setOpaque(false);
+		logoPanel.setBorder(null);
+		logoPanel.setBounds(391, 11, 123, 99);
+		logoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		logoPanel.add(logolabel);
+		contentPane.add(logoPanel);
+		
+	
 
 		usernameTextField = new HintTextField("Username");
 		usernameTextField.setBounds(108, 117, 345, 25);
 		usernameTextField.setColumns(10);
 		contentPane.add(usernameTextField);
 
+		
+		titleLabel = new JLabel(" Log into Bet & Ruin");
+		titleLabel.setBounds(-42, 36, 587, 26);
+		contentPane.add(titleLabel);
+		titleLabel.setForeground(new Color(153, 153, 153));
+		titleLabel.setOpaque(false);
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		titleLabel.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 27));
 		
 		usernameErrorLabel = new JLabel("");
 		usernameErrorLabel.setFont(new Font("Source Code Pro", Font.BOLD, 13));
@@ -132,7 +139,7 @@ public class LoginGUI extends JDialog {
 		contentPane.add(loginButton);
 
 		panel_1 = new JPanel();
-		panel_1.setBackground(new Color(0, 0, 0));
+		panel_1.setOpaque(false);
 		panel_1.setBounds(52, 99, 46, 51);
 		contentPane.add(panel_1);
 
@@ -141,7 +148,7 @@ public class LoginGUI extends JDialog {
 		panel_1.add(usernameIconLabel_1);
 
 		panel_2 = new JPanel();
-		panel_2.setBackground(new Color(0, 0, 0));
+		panel_2.setOpaque(false);
 		panel_2.setBounds(52, 165, 46, 51);
 		contentPane.add(panel_2);
 		passIconLabel_1 = new JLabel();
@@ -186,15 +193,28 @@ public class LoginGUI extends JDialog {
 								
 		
 		passVisibleLabel pvl = new passVisibleLabel(passwordField);
-		pvl.setBounds(460, 179, 65, 29);
+		pvl.setBounds(454, 175, 71, 29);
 		pvl.setVisible(true);
 		contentPane.add(pvl);
 		
 		cancelLabel cancelLabel_ = new cancelLabel(this);
 		cancelLabel_.setBounds(429, 345, 96, 23);
 		contentPane.add(cancelLabel_);
+		
+		
+		//Width:551.0
+		//Height:422.0
+		
+		ImageIcon background = new ImageIcon("images/background/black.jpg");
+		Image img = background.getImage();
+		Image tenp = img.getScaledInstance(551, 442, Image.SCALE_SMOOTH);
+		background = new ImageIcon(tenp);
+		JLabel back = new JLabel(background);
+		back.setLayout(null);
+		back.setBounds(0,0,551,442);
+		contentPane.add(back);
+		
 	}
-
 	
 	
 	public Boolean getResult() {

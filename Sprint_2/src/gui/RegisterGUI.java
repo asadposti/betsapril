@@ -1,9 +1,4 @@
 package gui;
-
-import javax.swing.JTextField;
-
-import com.toedter.calendar.demo.BirthdayEvaluator;
-
 import businessLogic.BLFacade;
 import domain.Gender;
 import domain.Nationality;
@@ -12,13 +7,10 @@ import exceptions.invalidID;
 import gui.components.HintPassField;
 import gui.components.HintTextField;
 import gui.components.passVisibleLabel;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
-
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -29,15 +21,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.Spliterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
-import javax.swing.JPasswordField;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Window;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -48,7 +37,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
 import gui.components.cancelLabel;
 import javax.swing.SwingConstants;
@@ -253,17 +241,17 @@ public class RegisterGUI extends JDialog {
 		gbc_rdbtnUser.gridx = 13;
 		gbc_rdbtnUser.gridy = 7;
 		getContentPane().add(rdbtnUser, gbc_rdbtnUser);
-		
-				buttonGroupStatus.add(rdbtnAdmin);
-				GridBagConstraints gbc_rdbtnAdmin = new GridBagConstraints();
-				gbc_rdbtnAdmin.anchor = GridBagConstraints.WEST;
-				gbc_rdbtnAdmin.insets = new Insets(0, 0, 5, 5);
-				gbc_rdbtnAdmin.gridx = 14;
-				gbc_rdbtnAdmin.gridy = 7;
-				rdbtnAdmin.setFont(new Font("Source Sans Pro", Font.PLAIN, 15));
-				rdbtnAdmin.setForeground(Color.WHITE);
-				rdbtnAdmin.setBackground(Color.BLACK);
-				getContentPane().add(rdbtnAdmin, gbc_rdbtnAdmin);
+
+		buttonGroupStatus.add(rdbtnAdmin);
+		GridBagConstraints gbc_rdbtnAdmin = new GridBagConstraints();
+		gbc_rdbtnAdmin.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnAdmin.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnAdmin.gridx = 14;
+		gbc_rdbtnAdmin.gridy = 7;
+		rdbtnAdmin.setFont(new Font("Source Sans Pro", Font.PLAIN, 15));
+		rdbtnAdmin.setForeground(Color.WHITE);
+		rdbtnAdmin.setBackground(Color.BLACK);
+		getContentPane().add(rdbtnAdmin, gbc_rdbtnAdmin);
 
 		pwErrorLabel.setForeground(new Color(255, 51, 51));
 		GridBagConstraints gbc_pwErrorLabel = new GridBagConstraints();
@@ -348,17 +336,17 @@ public class RegisterGUI extends JDialog {
 		rdbtnMale.setBackground(Color.BLACK);
 		rdbtnMale.setForeground(Color.WHITE);
 		getContentPane().add(rdbtnMale, gbc_rdbtnMale);
-		
-				buttonGroupGender.add(rdbtnFemale);
-				GridBagConstraints gbc_rdbtnFemale = new GridBagConstraints();
-				gbc_rdbtnFemale.anchor = GridBagConstraints.WEST;
-				gbc_rdbtnFemale.insets = new Insets(0, 0, 5, 5);
-				gbc_rdbtnFemale.gridx = 14;
-				gbc_rdbtnFemale.gridy = 10;
-				rdbtnFemale.setFont(new Font("Source Sans Pro", Font.PLAIN, 15));
-				rdbtnFemale.setBackground(Color.BLACK);
-				rdbtnFemale.setForeground(Color.WHITE);
-				getContentPane().add(rdbtnFemale, gbc_rdbtnFemale);
+
+		buttonGroupGender.add(rdbtnFemale);
+		GridBagConstraints gbc_rdbtnFemale = new GridBagConstraints();
+		gbc_rdbtnFemale.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnFemale.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnFemale.gridx = 14;
+		gbc_rdbtnFemale.gridy = 10;
+		rdbtnFemale.setFont(new Font("Source Sans Pro", Font.PLAIN, 15));
+		rdbtnFemale.setBackground(Color.BLACK);
+		rdbtnFemale.setForeground(Color.WHITE);
+		getContentPane().add(rdbtnFemale, gbc_rdbtnFemale);
 
 		GridBagConstraints gbc_genderErrorLabel = new GridBagConstraints();
 		gbc_genderErrorLabel.gridwidth = 3;
@@ -614,16 +602,16 @@ public class RegisterGUI extends JDialog {
 		comboBoxMonth.setModel(new DefaultComboBoxModel<String>(months));
 		comboBoxYear.setModel(new DefaultComboBoxModel<String>(years));
 		termsErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		
-				termsErrorLabel.setForeground(Color.RED);
-				GridBagConstraints gbc_termsErrorLabel = new GridBagConstraints();
-				gbc_termsErrorLabel.insets = new Insets(0, 0, 5, 0);
-				gbc_termsErrorLabel.fill = GridBagConstraints.HORIZONTAL;
-				gbc_termsErrorLabel.anchor = GridBagConstraints.NORTH;
-				gbc_termsErrorLabel.gridwidth = 9;
-				gbc_termsErrorLabel.gridx = 3;
-				gbc_termsErrorLabel.gridy = 24;
-				getContentPane().add(termsErrorLabel, gbc_termsErrorLabel);
+
+		termsErrorLabel.setForeground(Color.RED);
+		GridBagConstraints gbc_termsErrorLabel = new GridBagConstraints();
+		gbc_termsErrorLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_termsErrorLabel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_termsErrorLabel.anchor = GridBagConstraints.NORTH;
+		gbc_termsErrorLabel.gridwidth = 9;
+		gbc_termsErrorLabel.gridx = 3;
+		gbc_termsErrorLabel.gridy = 24;
+		getContentPane().add(termsErrorLabel, gbc_termsErrorLabel);
 		GridBagConstraints gbc_registerButton = new GridBagConstraints();
 		gbc_registerButton.gridwidth = 9;
 		gbc_registerButton.insets = new Insets(0, 0, 5, 5);
@@ -632,7 +620,7 @@ public class RegisterGUI extends JDialog {
 		gbc_registerButton.gridx = 3;
 		gbc_registerButton.gridy = 25;
 		getContentPane().add(getRegisterBtn(), gbc_registerButton);
-		
+
 		GridBagConstraints gbc_cancelLabel_ = new GridBagConstraints();
 		gbc_cancelLabel_.insets = new Insets(0, 0, 5, 5);
 		gbc_cancelLabel_.gridx = 14;
@@ -654,6 +642,8 @@ public class RegisterGUI extends JDialog {
 	private JButton getRegisterBtn() {
 		if(registerButton == null) {
 			registerButton = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Register"));
+			registerButton.setBorderPainted(false);
+			registerButton.setFocusPainted(false);
 			registerButton.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 16));
 			registerButton.setForeground(Color.WHITE);
 			registerButton.setBackground(new Color(102,102,102));

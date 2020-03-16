@@ -1,5 +1,6 @@
 package dataAccess;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery;
 
 import configuration.UtilDate;
 import domain.Event;
+import domain.Feedback.FeedbackType;
 import domain.Gender;
 import domain.Nationality;
 import domain.Question;
@@ -120,6 +122,11 @@ public interface DataAccess {
 	 * @return			cash on the account after the addition
 	 */
 	public float addCash(String ID, float cash);
+	
+	/**
+	 * 
+	 */
+	public void storeFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file);
 	
 	public void close();
 

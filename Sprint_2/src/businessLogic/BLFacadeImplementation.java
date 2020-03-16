@@ -1,5 +1,6 @@
 package businessLogic;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,8 +15,10 @@ import dataAccess.DataAccess;
 import dataAccess.DataAccessImplementation;
 import domain.Question;
 import domain.User;
+import domain.Feedback.FeedbackType;
 import domain.Bet;
 import domain.Event;
+import domain.Feedback;
 import domain.Gender;
 import domain.Nationality;
 import domain.Profile;
@@ -272,6 +275,13 @@ public class BLFacadeImplementation  implements BLFacade {
 		float newcash = dbManager.addCash(loggeduser.getID(), amount);
 		dbManager.close();
 		return newcash;
+	}
+	
+	public void submitFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file) {
+		DataAccessImplementation dbManager=new DataAccessImplementation();	
+		dbManager.storeFeedback(fbtype, email, name, summary, details, file);
+		dbManager.close();
+		
 	}
 }
 

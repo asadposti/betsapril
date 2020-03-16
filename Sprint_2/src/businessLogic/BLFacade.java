@@ -1,6 +1,7 @@
 package businessLogic;
 
 import java.util.Vector;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 //import domain.Booking;
 import domain.Question;
 import domain.User;
+import domain.Feedback.FeedbackType;
 import domain.Bet;
 import domain.Event;
 import domain.Gender;
@@ -157,4 +159,7 @@ public interface BLFacade  {
 	 * @return	cash on the account after the addition
 	 */
 	public float addCash(float amount);
+	
+	public void submitFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file);
+	
 }
