@@ -42,7 +42,9 @@ import domain.Question;
 import domain.User;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
+import exceptions.NoAnswers;
 import exceptions.QuestionAlreadyExist;
+import exceptions.QuestionNotFound;
 import exceptions.invalidID;
 import exceptions.invalidPW;
 
@@ -514,6 +516,34 @@ public class DataAccessImplementation implements DataAccess {
 		db.persist(fb);
 		db.getTransaction().commit();
 		System.out.println("Feedback sent sucessfully");
+	}
+
+	public ArrayList<String> getQuestionAnswersByQuestionID(int questionId) throws QuestionNotFound,NoAnswers {
+		Question q = db.find(Question.class, questionId);
+		if (q == null) {
+			throw new QuestionNotFound();
+		}else {
+			ArrayList<String> answers = q.getAnswers();
+			if (answers == null || answers.size() == 0) {
+				throw new NoAnswers("There is no Answer for the selected Question");
+			}else {
+				return answers;
+			}
+		}
+	}
+
+	public ArrayList<Float> getQuestionOddByQuestionID(int questionId) throws QuestionNotFound,NoAnswers {
+		Question q = db.find(Question.class, questionId);
+		if (q == null) {
+			throw new QuestionNotFound();
+		}else {
+			ArrayList<Float> odds = q.getOdds();
+			if (odds == null || odds.size() == 0) {
+				throw new NoAnswers("There is no Answer for the selected Question");
+			}else {
+				return odds;
+			}
+		}
 	}
 	
 	

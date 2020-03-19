@@ -24,7 +24,9 @@ import domain.Nationality;
 import domain.Profile;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
+import exceptions.NoAnswers;
 import exceptions.QuestionAlreadyExist;
+import exceptions.QuestionNotFound;
 import exceptions.invalidID;
 import exceptions.invalidPW;
 
@@ -36,19 +38,19 @@ public class BLFacadeImplementation  implements BLFacade {
 
 	private User loggeduser;
 	private Date sessionstart;
-	
-	
+
+
 	public BLFacadeImplementation()  {		
 		System.out.println("Creating BLFacadeImplementation instance");
 		ConfigXML c=ConfigXML.getInstance();
-		
+
 		if (c.getDataBaseOpenMode().equals("initialize")) {
 			DataAccessImplementation dbManager=new DataAccessImplementation(c.getDataBaseOpenMode().equals("initialize"));
 			dbManager.initializeDB();
 			dbManager.close();
-			}	
+		}	
 	}
-	
+
 
 	/**
 	 * This method creates a question for an event, with a question text and the minimum bet
@@ -58,13 +60,13 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @param betMinimum minimum quantity of the bet
 	 * @return the created question, or null, or an exception
 	 * @throws EventFinished if current data is after data of the event
- 	 * @throws QuestionAlreadyExist if the same question already exists for the event
+	 * @throws QuestionAlreadyExist if the same question already exists for the event
 	 */
-   @WebMethod
-   public Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws EventFinished, QuestionAlreadyExist{
-	   
-	    //The minimum bed must be greater than 0
-	   DataAccess dBManager=new DataAccessImplementation();	    
+	@WebMethod
+	public Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws EventFinished, QuestionAlreadyExist{
+
+		//The minimum bed must be greater than 0
+		DataAccess dBManager=new DataAccessImplementation();	    
 		if(new Date().compareTo(event.getEventDate())>0) {
 			dBManager.close();
 			throw new EventFinished(ResourceBundle.getBundle("Etiquetas").getString("ErrorEventHasFinished"));
@@ -79,23 +81,23 @@ public class BLFacadeImplementation  implements BLFacade {
 			throw new QuestionAlreadyExist(q.getMessage());
 		}
 
-   };
-	
+	};
+
 	/**
 	 * This method invokes the data access to retrieve the events of a given date 
 	 * 
 	 * @param date in which events are retrieved
 	 * @return collection of events
 	 */
-    @WebMethod	
+	@WebMethod	
 	public Vector<Event> getEvents(Date date)  {
-    	DataAccess dbManager=new DataAccessImplementation();
+		DataAccess dbManager=new DataAccessImplementation();
 		Vector<Event>  events=dbManager.getEvents(date);
 		dbManager.close();
 		return events;
 	}
 
-    
+
 	/**
 	 * This method invokes the data access to retrieve the dates a month for which there are events
 	 * 
@@ -108,7 +110,7 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 		return dates;
 	}
-	
+
 	/**
 	 * This method registers a new user.
 	 * 
@@ -124,18 +126,18 @@ public class BLFacadeImplementation  implements BLFacade {
 	@WebMethod
 	public void registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
 			Nationality nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID{
-	
+
 		DataAccess dBManager=new DataAccessImplementation();
-	    try {
-	    	dBManager.registerUser(iD, password, name, surname, email, address, g, phone, nat, city, birthDate, pic, isAdmin);
-	    	dBManager.close();
-	    }
-	    catch (invalidID i) {
-		    dBManager.close();
+		try {
+			dBManager.registerUser(iD, password, name, surname, email, address, g, phone, nat, city, birthDate, pic, isAdmin);
+			dBManager.close();
+		}
+		catch (invalidID i) {
+			dBManager.close();
 			throw new invalidID(i.getMessage());
 		}
 	}
-	
+
 	/**
 	 * This methods checks the validity of the credentials (id / password) inputed upon login.
 	 * @param ID			ID of the presumed user.
@@ -147,20 +149,20 @@ public class BLFacadeImplementation  implements BLFacade {
 	@WebMethod
 	public boolean checkCredentials(String ID, String password) throws invalidID, invalidPW{
 		DataAccess dBManager=new DataAccessImplementation();
-	    try {
-	    	User u = dBManager.retrieveUser(ID, password);
-	    	dBManager.close();
-	    	loggeduser = u;
-	    	return u.isAdmin();
-	    }	
-	    catch (invalidID e) {
-	    	dBManager.close();
+		try {
+			User u = dBManager.retrieveUser(ID, password);
+			dBManager.close();
+			loggeduser = u;
+			return u.isAdmin();
+		}	
+		catch (invalidID e) {
+			dBManager.close();
 			throw new invalidID(e.getMessage());
 		}
-	    catch (invalidPW e) {
-	    	dBManager.close();
-	    	throw new invalidPW(e.getMessage());
-	    }
+		catch (invalidPW e) {
+			dBManager.close();
+			throw new invalidPW(e.getMessage());
+		}
 	}
 
 	/**
@@ -173,7 +175,7 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 		return searchResult;
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -183,7 +185,7 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.removeUser(ID);
 		dbManager.close();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -198,16 +200,16 @@ public class BLFacadeImplementation  implements BLFacade {
 			dbManager.close();
 			throw new invalidID();
 		}
-			
+
 	}
-	
+
 	/**
 	 * This method invokes the data access to initialize the database with some events and questions.
 	 * It is invoked only when the option "initialize" is declared in the tag dataBaseOpenMode of resources/config.xml file
 	 */	
-    @WebMethod	
-	 public void initializeBD(){
-    	DataAccess dBManager=new DataAccessImplementation();
+	@WebMethod	
+	public void initializeBD(){
+		DataAccess dBManager=new DataAccessImplementation();
 		dBManager.initializeDB();
 		dBManager.close();
 	}
@@ -222,7 +224,7 @@ public class BLFacadeImplementation  implements BLFacade {
 			dbManager.recordBet(q, ID, amount, answer);
 			dbManager.close();
 		}
-		
+
 	}
 
 	/**
@@ -238,7 +240,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @return		List<Bet> user's bets
 	 */
 	public List<Bet> retrieveBets(){
-			return loggeduser.getBets();
+		return loggeduser.getBets();
 	}
 
 	/**
@@ -256,7 +258,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	public Profile getProfile() {
 		return loggeduser.getProfile();
 	}
-	
+
 	/**
 	 * Indicates if the logged user has an admin status.
 	 * @return	boolean(true: if loggeduser is an admin, false:else)
@@ -264,7 +266,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	public boolean isAdmin() {
 		return loggeduser.isAdmin();
 	}
-	
+
 	/**
 	 * Adds introduced amount the cash stored on the user's account
 	 * @param amount	amount of money to add(float)
@@ -276,12 +278,41 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 		return newcash;
 	}
-	
+
 	public void submitFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file) {
 		DataAccessImplementation dbManager=new DataAccessImplementation();	
 		dbManager.storeFeedback(fbtype, email, name, summary, details, file);
 		dbManager.close();
+
+	}
+
+
+	@Override
+	public ArrayList<String> getQuestionAnswers(int questionId) throws QuestionNotFound, NoAnswers {
+		// TODO Auto-generated method stub
+		DataAccessImplementation dbManager = new DataAccessImplementation();
+		try {
+			ArrayList<String> ans = dbManager.getQuestionAnswersByQuestionID(questionId);
+			dbManager.close();
+			return ans;
+		} catch (NoAnswers e) {
+			// TODO: handle exception
+			throw new NoAnswers(e.getMessage());
+		}
 		
+	}
+
+
+	@Override
+	public ArrayList<Float> getOdds(int questionId) throws QuestionNotFound,NoAnswers {
+		DataAccessImplementation dbManager = new DataAccessImplementation();
+		try {
+			ArrayList<Float> odds = dbManager.getQuestionOddByQuestionID(questionId);
+			dbManager.close();
+			return odds;
+		} catch (NoAnswers e) {
+			throw new NoAnswers(e.getMessage());
+		}	
 	}
 }
 

@@ -223,7 +223,7 @@ public class CreateQuestionPanel extends JPanel {
 						count++;
 						String answer = answerTextField.getText();
 						float odd = Float.parseFloat(oddTextField.getText());
-						oddTextField.setBorder(new LineBorder(Color.RED, 1));
+						oddTextField.setBorder(new LineBorder(Color.BLACK, 1));
 						answerTextField.setBorder(new LineBorder(Color.BLACK, 1));
 						AnswerList.add(answer);
 						OddLsit.add(odd);
@@ -358,7 +358,6 @@ public class CreateQuestionPanel extends JPanel {
 					.getComponent(calendar.get(Calendar.DAY_OF_MONTH) + offset);
 			o.setBackground(Color.CYAN);
 		}
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.MONTH, month);
 	}
 

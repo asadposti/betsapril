@@ -9,12 +9,14 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,9 +27,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JCalendar;
 import businessLogic.BLFacade;
+import businessLogic.BLFacadeImplementation;
 import configuration.UtilDate;
 import domain.Question;
 import exceptions.InsufficientCash;
+import exceptions.NoAnswers;
+import exceptions.QuestionNotFound;
 import gui.LoginGUI;
 import gui.MainGUI;
 import gui.RegisterGUI;
@@ -35,6 +40,12 @@ import gui.components.NonEditableTableModel;
 
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumnModel;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -75,16 +86,16 @@ public class BrowsePanel extends JPanel {
 	private JTextField betTextField;
 
 	private JButton btnBet;
-
-
+	
+	private JComboBox<String> answerComboBox = new JComboBox<String>();
 	/**
 	 * Create the panel.
 	 */
 	public BrowsePanel() {
 		setBackground(UIManager.getColor("Button.highlight"));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{40, 225, 30, 157, 51, 138, 40, 0};
-		gridBagLayout.rowHeights = new int[]{40, 115, 25, 150, 15, 14, 22, 25, 0, 0, 40, 0};
+		gridBagLayout.columnWidths = new int[]{40, 225, 30, 157, 23, 171, 40, 0};
+		gridBagLayout.rowHeights = new int[]{40, 15, 25, 150, 15, 14, 22, 25, 0, 0, 40, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
@@ -155,7 +166,6 @@ public class BrowsePanel extends JPanel {
 		{
 			public void propertyChange(PropertyChangeEvent propertychangeevent)
 			{
-
 				if (propertychangeevent.getPropertyName().equals("locale"))
 				{
 					jCalendar1.setLocale((Locale) propertychangeevent.getNewValue());
@@ -166,7 +176,7 @@ public class BrowsePanel extends JPanel {
 					DateFormat dateformat1 = DateFormat.getDateInstance(1, jCalendar1.getLocale());
 					jCalendar1.setCalendar(calendarMio);
 					Date firstDay=UtilDate.trim(new Date(jCalendar1.getCalendar().getTime().getTime()));
-
+					errorlabel.setText("");
 					try {
 						tableModelEvents.setDataVector(null, columnNamesEvents);
 						tableModelEvents.setColumnCount(3); // another column added to allocate ev objects
@@ -239,6 +249,37 @@ public class BrowsePanel extends JPanel {
 		gbc_scrollPaneQueries.gridx = 1;
 		gbc_scrollPaneQueries.gridy = 6;
 		add(scrollPaneQueries, gbc_scrollPaneQueries);
+		tableQueries.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stuf
+				answerComboBox.removeAllItems();
+				errorlabel.setText("");
+				int i = tableQueries.getSelectedRow();
+				if (i != -1) {
+					int questionId =  (int) tableQueries.getValueAt(i, 0);
+					BLFacade facade = MainGUI.getBusinessLogic();
+					try {
+						ArrayList<String> answers = facade.getQuestionAnswers(questionId);
+						ArrayList<Float> odds = facade.getOdds(questionId);
+						for (int j = 0; j < answers.size(); j++) {
+							String answer = answers.get(j) + "; " + odds.get(j).toString();
+							answerComboBox.addItem(answer);
+						}
+					} catch (QuestionNotFound e2) {
+						// TODO: handle exception
+						errorlabel.setText(e2.getMessage());
+						
+					} catch (NoAnswers e2) {
+						// TODO: handle exception
+						errorlabel.setText(e2.getMessage());
+					}
+
+					
+				}
+				}
+		});
 		GridBagConstraints gbc_lblPlaceBet = new GridBagConstraints();
 		gbc_lblPlaceBet.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_lblPlaceBet.insets = new Insets(0, 0, 5, 5);
@@ -275,6 +316,13 @@ public class BrowsePanel extends JPanel {
 		gbc_errorlabel.gridx = 1;
 		gbc_errorlabel.gridy = 10;
 		add(errorlabel, gbc_errorlabel);
+		GridBagConstraints gbc_answerComboBox = new GridBagConstraints();
+		gbc_answerComboBox.insets = new Insets(5, 0, 125, 45);
+		gbc_answerComboBox.fill = GridBagConstraints.BOTH;
+		gbc_answerComboBox.gridwidth = 2;
+		gbc_answerComboBox.gridx = 5;
+		gbc_answerComboBox.gridy = 9;
+		add(answerComboBox, gbc_answerComboBox);
 	}
 
 

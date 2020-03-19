@@ -17,7 +17,9 @@ import domain.Nationality;
 import domain.Profile;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
+import exceptions.NoAnswers;
 import exceptions.QuestionAlreadyExist;
+import exceptions.QuestionNotFound;
 import exceptions.invalidID;
 import exceptions.invalidPW;
 
@@ -161,5 +163,11 @@ public interface BLFacade  {
 	public float addCash(float amount);
 	
 	public void submitFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file);
+
+
+	ArrayList<String> getQuestionAnswers(int questionId) throws QuestionNotFound, NoAnswers;
+
+
+	ArrayList<Float> getOdds(int questionId) throws QuestionNotFound, NoAnswers;
 	
 }

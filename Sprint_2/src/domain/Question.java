@@ -26,8 +26,9 @@ public class Question implements Serializable {
 	private int result;  
 	@XmlIDREF
 	private Event event;
-	
+	@OneToMany (fetch = FetchType.EAGER)
 	private ArrayList<String> answers;
+	@OneToMany (fetch = FetchType.EAGER)
 	private ArrayList<Float> odds;
 	
 	public Question(){
@@ -42,6 +43,10 @@ public class Question implements Serializable {
 		this.event = event;
 	}
 	
+	public ArrayList<Float> getOdds() {
+		return odds;
+	}
+
 	public Question(String query, float betMinimum,  Event event) {
 		super();
 		this.question = query;
@@ -165,7 +170,7 @@ public class Question implements Serializable {
 	 */
 	
 	public ArrayList<String> getAnswers() {
-		return answers;
+		return this.answers;
 	}
 
 	
