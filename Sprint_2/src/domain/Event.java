@@ -1,7 +1,10 @@
 package domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -9,6 +12,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import exceptions.QuestionAlreadyExist;
@@ -22,31 +26,42 @@ public class Event implements Serializable {
 	@Id @GeneratedValue
 	private Integer eventNumber;
 	private String description; 
-	private Date eventDate;
+	private Date eventdate;
+	private Date endingdate;
+	public Date getEventdate() {
+		return eventdate;
+	}
+
+
+	private Sport sport;
+	
+	@XmlIDREF
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
+	private Competition competition;
+
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
-	private Vector<Question> questions=new Vector<Question>();
+	private List<Question> questions;
 
-	public Vector<Question> getQuestions() {
-		return questions;
-	}
-
-	public void setQuestions(Vector<Question> questions) {
-		this.questions = questions;
-	}
 
 	public Event() {
 		super();
 	}
 
-	public Event(Integer eventNumber, String description,Date eventDate) {
+	public Event(Integer eventNumber, String description,Date eventdate, Date endingdate , Sport sport) {
 		this.eventNumber = eventNumber;
 		this.description = description;
-		this.eventDate=eventDate;
+		this.eventdate = eventdate;
+		this.endingdate = endingdate;
+		this.sport = sport;
+		this.questions = new ArrayList<Question>();
 	}
 	
-	public Event( String description,Date eventDate) {
+	public Event( String description,Date eventDate, Date endingdate ,Sport sport) {
 		this.description = description;
-		this.eventDate=eventDate;
+		this.eventdate=eventDate;
+		this.endingdate = endingdate;
+		this.sport = sport;
+		this.questions = new ArrayList<Question>();
 	}
 
 	public Integer getEventNumber() {
@@ -66,16 +81,40 @@ public class Event implements Serializable {
 	}
 
 	public Date getEventDate() {
-		return eventDate;
+		return eventdate;
 	}
 
 	public void setEventDate(Date eventDate) {
-		this.eventDate = eventDate;
+		this.eventdate = eventDate;
 	}
-	
 	
 	public String toString(){
 		return eventNumber+";"+description;
+	}
+	
+	public Competition getCompetition() {
+		return competition;
+	}
+
+	public void setCompetition(Competition competition) {
+		this.competition = competition;
+	}
+	
+
+	public void setEventdate(Date eventdate) {
+		this.eventdate = eventdate;
+	}
+
+	public Date getEndingdate() {
+		return endingdate;
+	}
+
+	public void setEndingdate(Date endingdate) {
+		this.endingdate = endingdate;
+	}
+
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
 	}
 	
 	/**
@@ -87,6 +126,25 @@ public class Event implements Serializable {
 	 */
 	public Question addQuestion(String question, float betMinimum)  {
         Question q=new Question(question,betMinimum, this);
+        if(questions == null) {
+        	questions = new ArrayList<Question>();
+        }
+        questions.add(q);
+        return q;
+	}
+	
+	/**
+	 * This method creates a bet with a question, minimum bet ammount and percentual profit
+	 * 
+	 * @param question to be added to the event
+	 * @param betMinimum of that question
+	 * @return Bet
+	 */
+	public Question addQuestion(String question, float betMinimum, List<Prediction> predictions)  {
+        Question q=new Question(question,betMinimum, this, predictions);
+        if(questions == null) {
+        	questions = new ArrayList<Question>();
+        }
         questions.add(q);
         return q;
 	}
@@ -130,7 +188,22 @@ public class Event implements Serializable {
 		return true;
 	}
 	
-	
+	public List<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(Vector<Question> questions) {
+		this.questions = questions;
+	}
+
+	public Sport getSport() {
+		return sport;
+	}
+
+	public void setSport(Sport sport) {
+		this.sport = sport;
+	}
+
 	
 	
 

@@ -1,7 +1,6 @@
 package gui;
 import businessLogic.BLFacade;
-import domain.Gender;
-import domain.Nationality;
+import domain.Country;
 import domain.User;
 import exceptions.invalidID;
 import gui.components.HintPassField;
@@ -11,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +30,8 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import javax.swing.JRadioButton;
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -61,13 +61,11 @@ public class RegisterGUI extends JDialog {
 	private HintTextField phonePrefTextField  = new HintTextField("Prefix (ex. +34)");
 	private HintTextField pcodeTextField = new HintTextField("ex. 20800");
 
-
 	private JLabel lblPostalCode = new JLabel("Postal code:");
 	private JLabel lblPhoneNumber = new JLabel("Phone number:");
 	private JLabel lblAddress = new JLabel("Address:");
 	private JLabel lblCity = new JLabel("City:");
 	private JLabel lblNationality = new JLabel("Nationality:");	
-	private JLabel lblGender = new JLabel("Gender:\r\n");
 	private JLabel lblSurname = new JLabel("Surname:");
 	private JLabel lblName = new JLabel("Name:");
 	private JLabel lblBithdate = new JLabel("Bithdate:");
@@ -88,9 +86,6 @@ public class RegisterGUI extends JDialog {
 	private JLabel phoneErrorLabel = new JLabel("");
 
 	private final ButtonGroup buttonGroupStatus = new ButtonGroup();
-	private final ButtonGroup buttonGroupGender = new ButtonGroup();
-	private JRadioButton rdbtnFemale = new JRadioButton("Female");
-	private JRadioButton rdbtnMale = new JRadioButton("Male");
 	private JRadioButton rdbtnAdmin = new JRadioButton("Admin.");
 	private JRadioButton rdbtnUser = new JRadioButton("user");
 
@@ -154,7 +149,7 @@ public class RegisterGUI extends JDialog {
 		gbc_lblUsername.gridx = 1;
 		gbc_lblUsername.gridy = 3;
 		lblUsername.setForeground(Color.WHITE);
-		lblUsername.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 15));
+		lblUsername.setFont(new Font("Source Code Pro Light", Font.BOLD, 15));
 		getContentPane().add(lblUsername, gbc_lblUsername);
 
 		usernameTextField.setColumns(10);
@@ -181,7 +176,7 @@ public class RegisterGUI extends JDialog {
 		gbc_lblPassword.gridx = 1;
 		gbc_lblPassword.gridy = 6;
 		lblPassword.setForeground(Color.WHITE);
-		lblPassword.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 15));
+		lblPassword.setFont(new Font("Source Code Pro Light", Font.BOLD, 15));
 		getContentPane().add(lblPassword, gbc_lblPassword);
 
 
@@ -278,7 +273,7 @@ public class RegisterGUI extends JDialog {
 		gbc_lblConfirmPassword.gridx = 1;
 		gbc_lblConfirmPassword.gridy = 9;
 		lblConfirmPassword.setForeground(Color.WHITE);
-		lblConfirmPassword.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 15));
+		lblConfirmPassword.setFont(new Font("Source Code Pro Light", Font.BOLD, 15));
 		getContentPane().add(lblConfirmPassword, gbc_lblConfirmPassword);
 
 		GridBagConstraints gbc_lblSurname = new GridBagConstraints();
@@ -292,16 +287,6 @@ public class RegisterGUI extends JDialog {
 		lblSurname.setBackground(Color.BLACK);
 		lblSurname.setForeground(Color.WHITE);
 		getContentPane().add(lblSurname, gbc_lblSurname);
-
-		GridBagConstraints gbc_lblGender = new GridBagConstraints();
-		gbc_lblGender.anchor = GridBagConstraints.WEST;
-		gbc_lblGender.gridwidth = 3;
-		gbc_lblGender.insets = new Insets(0, 0, 5, 0);
-		gbc_lblGender.gridx = 13;
-		gbc_lblGender.gridy = 9;
-		lblGender.setForeground(Color.WHITE);
-		lblGender.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 15));
-		getContentPane().add(lblGender, gbc_lblGender);
 
 		GridBagConstraints gbc_passwordConfirmField = new GridBagConstraints();
 		gbc_passwordConfirmField.gridwidth = 5;
@@ -326,28 +311,6 @@ public class RegisterGUI extends JDialog {
 		gbc_surnameTextField.gridy = 10;
 		getContentPane().add(surnameTextField, gbc_surnameTextField);
 
-		buttonGroupGender.add(rdbtnMale);
-		GridBagConstraints gbc_rdbtnMale = new GridBagConstraints();
-		gbc_rdbtnMale.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnMale.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnMale.gridx = 13;
-		gbc_rdbtnMale.gridy = 10;
-		rdbtnMale.setFont(new Font("Source Sans Pro", Font.PLAIN, 15));
-		rdbtnMale.setBackground(Color.BLACK);
-		rdbtnMale.setForeground(Color.WHITE);
-		getContentPane().add(rdbtnMale, gbc_rdbtnMale);
-
-		buttonGroupGender.add(rdbtnFemale);
-		GridBagConstraints gbc_rdbtnFemale = new GridBagConstraints();
-		gbc_rdbtnFemale.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnFemale.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnFemale.gridx = 14;
-		gbc_rdbtnFemale.gridy = 10;
-		rdbtnFemale.setFont(new Font("Source Sans Pro", Font.PLAIN, 15));
-		rdbtnFemale.setBackground(Color.BLACK);
-		rdbtnFemale.setForeground(Color.WHITE);
-		getContentPane().add(rdbtnFemale, gbc_rdbtnFemale);
-
 		GridBagConstraints gbc_genderErrorLabel = new GridBagConstraints();
 		gbc_genderErrorLabel.gridwidth = 3;
 		gbc_genderErrorLabel.insets = new Insets(0, 0, 5, 0);
@@ -362,7 +325,7 @@ public class RegisterGUI extends JDialog {
 		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEmail.gridx = 1;
 		gbc_lblEmail.gridy = 12;
-		lblEmail.setFont(new Font("Source Code Pro ExtraLight", Font.PLAIN, 15));
+		lblEmail.setFont(new Font("Source Code Pro Light", Font.PLAIN, 15));
 		lblEmail.setForeground(Color.WHITE);
 		getContentPane().add(lblEmail, gbc_lblEmail);
 
@@ -597,7 +560,7 @@ public class RegisterGUI extends JDialog {
 		for(Integer i=1900; i<currentyear; i++) {
 			years[i-1899]=i.toString();
 		}
-		comboBoxNat.setModel(new DefaultComboBoxModel<String>(Nationality.namesArray()));
+		comboBoxNat.setModel(new DefaultComboBoxModel<String>(Country.namesArray()));
 		comboBoxDay.setModel(new DefaultComboBoxModel<String>(days));
 		comboBoxMonth.setModel(new DefaultComboBoxModel<String>(months));
 		comboBoxYear.setModel(new DefaultComboBoxModel<String>(years));
@@ -629,6 +592,7 @@ public class RegisterGUI extends JDialog {
 		getContentPane().add(cancelLabel_, gbc_cancelLabel_);
 
 		usernameErrorLabel.requestFocus();
+		this.setResizable(false);
 	}
 
 
@@ -647,7 +611,11 @@ public class RegisterGUI extends JDialog {
 			registerButton.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 16));
 			registerButton.setForeground(Color.WHITE);
 			registerButton.setBackground(new Color(102,102,102));
-			registerButton.addActionListener(new ActionListener() {
+			
+			Action register = new AbstractAction() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 
 					BLFacade facade = MainGUI.getBusinessLogic();
@@ -676,20 +644,13 @@ public class RegisterGUI extends JDialog {
 					String pcode = pcodeTextField.getText();
 
 					String[] s = comboBoxNat.getSelectedItem().toString().split(", ");
-					Nationality nat = Nationality.valueOf(s[1]);
+					Country nat = Country.valueOf(s[1]);
 					int day = comboBoxDay.getSelectedIndex();
 					int month = comboBoxMonth.getSelectedIndex();
 					int year = comboBoxYear.getSelectedIndex();
 					String date = comboBoxDay.getSelectedItem() + "-" + comboBoxMonth.getSelectedItem() + "-" + comboBoxYear.getSelectedItem();
 
 					boolean rights = rdbtnAdmin.isSelected();
-					Gender gender = null;
-					if(rdbtnMale.isSelected()) {
-						gender = Gender.MALE;
-					}
-					else if(rdbtnFemale.isSelected()) {
-						gender = Gender.FEMALE;
-					}
 
 					//check input validity
 					if (username.equals("") || pass.equals("") || name.equals("") || surname.equals("") || email.equals("") || city.equals("") || address.equals("") || phone.equals("")|| phonepref.equals("") || pcode.equals("")){
@@ -700,9 +661,6 @@ public class RegisterGUI extends JDialog {
 					}
 					else if(!passconfirm.equals(pass)){
 						confirmPwErrorLabel.setText("Passwords don't match");
-					}
-					else if(gender==null) {
-						genderErrorLabel.setText("Please select a gender");
 					}
 					else if(day <= 0 || month <= 0 || year <= 0) {
 						bdateErrorLabel.setText("Please a value for all areas");
@@ -726,7 +684,7 @@ public class RegisterGUI extends JDialog {
 							Date bdate = f.parse(date);
 
 							System.out.println(username + " " + pass + " " + passconfirm + " " + name + " " + surname + " " + email);
-							facade.registerUser(username, pass, name, surname, email, address, gender ,phone, nat ,city,bdate, "images/profilepic/smiley.png",rights);
+							facade.registerUser(username, pass, name, surname, email, address,phone, nat ,city,bdate, "images/profilepic/smiley.png",rights);
 							JOptionPane.showMessageDialog(null, "Registration sucessfull");
 							dispose();
 						}
@@ -738,9 +696,9 @@ public class RegisterGUI extends JDialog {
 						}
 					}
 				}
-			});	
-
-		}
+			};	
+			registerButton.addActionListener(register); 
+			};
 		return registerButton;
 	}
 
@@ -798,5 +756,8 @@ public class RegisterGUI extends JDialog {
 		return new ImageIcon(i);
 
 	}
+	
+		
+
 
 }

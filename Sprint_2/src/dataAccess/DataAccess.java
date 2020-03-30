@@ -1,22 +1,20 @@
 package dataAccess;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
-
-import javax.persistence.TypedQuery;
-
-import configuration.UtilDate;
 import domain.Event;
 import domain.Feedback.FeedbackType;
-import domain.Gender;
-import domain.Nationality;
+import domain.Prediction;
+import domain.Bet;
+import domain.BetType;
+import domain.Competition;
+import domain.Country;
 import domain.Question;
+import domain.Sport;
 import domain.User;
 import exceptions.QuestionAlreadyExist;
 import exceptions.invalidID;
@@ -35,10 +33,10 @@ public interface DataAccess {
 	 * @param question text of the question
 	 * @param betMinimum minimum quantity of the bet
 	 * @return the created question, or null, or an exception
- 	 * @throws QuestionAlreadyExist if the same question already exists for the event
+	 * @throws QuestionAlreadyExist if the same question already exists for the event
 	 */
-	public Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws  QuestionAlreadyExist;
-	
+	public Question createQuestion(Event event, String question, float betMinimum, List<Prediction> predictions) throws  QuestionAlreadyExist;
+
 	/**
 	 * This method retrieves from the database the events of a given date 
 	 * 
@@ -46,7 +44,17 @@ public interface DataAccess {
 	 * @return collection of events
 	 */
 	public Vector<Event> getEvents(Date date);
-	
+
+
+	/**
+	 * This method retrieves from the database the events of a given date and sport
+	 * 
+	 * @param date in which events are retrieved
+	 * @param sport to look for
+	 * @return collection of events
+	 */
+	public Vector<Event> getEvents(Date date, Sport sport);
+
 	/**
 	 * This method retrieves from the database the dates a month for which there are events
 	 * 
@@ -54,6 +62,24 @@ public interface DataAccess {
 	 * @return collection of dates
 	 */
 	public Vector<Date> getEventsMonth(Date date);
+
+	/**
+	 * This method retrieves from the database the dates a month for which there are events of the corresponding competition
+	 * 
+	 * @param date of the month for which days with events want to be retrieved 
+	 * @param competition to look for
+	 * @return collection of dates 
+	 */
+	public Vector<Date> getEventsMonth(Date date, Competition competition);
+
+	/**
+	 * This method retrieves from the database the competitions for the given sport
+	 * 
+	 * @param sport  Sport for which competitions are retrieved
+	 * @return	collection of Competitions
+	 */
+	public Vector<Competition> getCompetitions(Sport sport);
+
 	/**
 	 * This method registers a new user in the database.
 	 * 
@@ -67,8 +93,8 @@ public interface DataAccess {
 	 * @return					the newly created User object.
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
-	public User registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
-													Nationality nat,String city, Date birthdDate, String pic, boolean isAdmin) throws invalidID;
+	public User registerUser(String iD, String password, String name, String surname, String email, String address, String phone, 
+			Country nat,String city, Date birthdDate, String pic, boolean isAdmin) throws invalidID;
 	/**
 	 * This methods checks the validity of the credentials (id / password) inputed upon login.
 	 * @param ID			ID of the presumed user.
@@ -78,56 +104,63 @@ public interface DataAccess {
 	 * @throws invalidID	exception thrown when no user entity with the input ID exists in the database.
 	 */
 	public User retrieveUser(String ID, String pw) throws invalidID, invalidPW ;
-	
+
 	/**
 	 * 
-	 * @param iD
-	 * @param password
-	 * @param name
-	 * @param surname
-	 * @param email
+	 * @param searchtext
+	 * @param filter
+	 * @param casesensitive
+	 * @param match
 	 * @return
 	 */
-	public List<User> retrieveUsersByCriteria(String searchtext, int filter, boolean casesensitive);
-	
+	public List<User> retrieveUsersByCriteria(String searchtext, String filter, boolean casesensitive, int match);
+
 	/**
 	 * 
 	 * @param iD
 	 * @return
 	 */
 	public void removeUser(String iD);
-	
+
 	/**
 	 * 
+	 * @param key
 	 * @param iD
 	 * @param name
 	 * @param surname
 	 * @param email
+	 * @param addr
+	 * @param phn
+	 * @param nat
+	 * @param city
+	 * @param birthdt
 	 * @param isAdmin
+	 * @throws invalidID
 	 */
-	public void updateUserInfo(String key, String iD, String name, String surname, String email, boolean isAdmin) throws invalidID;
-	
+	public void updateUserInfo(String key, String iD, String name, String surname, String email, String addr, 
+			String phn, Country nat,String city, Date birthdt, boolean isAdmin) throws invalidID;
+
 	/**
 	 * 
 	 * @param q
 	 * @param u
 	 * @param amount
 	 */
-	public void recordBet(Question q, String ID, float amount, int answer); 
-	
-	 /**
+	public void recordBets(User bettor, float stake, BetType type, List<Prediction> predictions);
+
+	/**
 	 * Adds introduced amount the cash stored on the user's account
 	 * @param ID		ID of the user to add the cash
 	 * @param amount	amount of money to add(float)
 	 * @return			cash on the account after the addition
 	 */
 	public float addCash(String ID, float cash);
-	
+
 	/**
 	 * 
 	 */
 	public void storeFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file);
-	
+
 	public void close();
 
 }

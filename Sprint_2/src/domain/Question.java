@@ -3,6 +3,9 @@ package domain;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.persistence.*;
@@ -24,15 +27,23 @@ public class Question implements Serializable {
 	private String question; 
 	private float betMinimum;
 	private int result;  
+	@OneToMany(cascade = CascadeType.PERSIST ,fetch = FetchType.EAGER)
+	private List<Prediction> predictions;
 	@XmlIDREF
 	private Event event;
-	@OneToMany (fetch = FetchType.EAGER)
-	private ArrayList<String> answers;
-	@OneToMany (fetch = FetchType.EAGER)
-	private ArrayList<Float> odds;
+	
+	
+	
 	
 	public Question(){
 		super();
+	}
+	
+	public Question( String query, float betMinimum, Event event) {
+		super();
+		this.question = query;
+		this.betMinimum=betMinimum;
+		this.event = event;
 	}
 	
 	public Question(Integer queryNumber, String query, float betMinimum, Event event) {
@@ -43,16 +54,14 @@ public class Question implements Serializable {
 		this.event = event;
 	}
 	
-	public ArrayList<Float> getOdds() {
-		return odds;
-	}
 
-	public Question(String query, float betMinimum,  Event event) {
+	public Question(String query, float betMinimum,  Event event, List<Prediction> predictions) {
 		super();
 		this.question = query;
 		this.betMinimum=betMinimum;
 
-		//this.event = event;
+		this.event = event;
+		this.predictions = predictions;
 	}
 
 	/**
@@ -169,8 +178,8 @@ public class Question implements Serializable {
 	 * @return the associated answers
 	 */
 	
-	public ArrayList<String> getAnswers() {
-		return this.answers;
+	public List<Prediction> getPredictions() {
+		return this.predictions;
 	}
 
 	
@@ -179,24 +188,20 @@ public class Question implements Serializable {
 	 * 
 	 * @param answers to associate to the question
 	 */
-	public void setAnswer(ArrayList<String> answers) {
-		this.answers =answers;
+	public void setPredictions(List<Prediction> answers) {
+		this.predictions =answers;
 	}
 
 
+	public void addPrediction(String answer, Float odd) {
+		if(predictions == null) {
+			predictions = new ArrayList<Prediction>();
+		}
+		predictions.add(new Prediction(this,answer,odd));
+	}
+	
 	public String toString(){
 		return questionNumber+";"+question+";"+Float.toString(betMinimum);
 	}
-
-
-
-	public void setOdds(ArrayList<Float> odds) {
-		// TODO Auto-generated method stub
-		this.odds =  odds;
-	}
-
-
-
-
 	
 }

@@ -5,8 +5,8 @@
 	<businessLogicPort>1099</businessLogicPort>
 	<businessLogicName>Bets</businessLogicName>
   </businessLogic>
-  <database local="true">
-	<databaseNode>0.0.0.0</databaseNode>
+  <database local="false">
+	<databaseNode>192.168.0.15</databaseNode>
 	<dbFilename>resources/bets.temp</dbFilename>
 	<dataBaseOpenMode>initialize</dataBaseOpenMode>
 	<databasePort>6136</databasePort>

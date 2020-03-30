@@ -9,8 +9,11 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -21,6 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,11 +32,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import businessLogic.BLFacade;
+import domain.Country;
 import domain.User;
 import gui.EditUserGUI;
 import gui.MainGUI;
@@ -58,10 +66,10 @@ public class userManagementPanel extends JPanel {
 	
 	private JTextField searchField = new JTextField();
 	private String searchinput;
-	private int searchfilter;
+	private String searchfilter;
 	private List<User> searchResult;
 	
-	private final int PAGESIZE = 15;
+	private final int PAGESIZE = 30;
 	private int currentpage;
 
 	private JButton btnSearch;
@@ -70,15 +78,24 @@ public class userManagementPanel extends JPanel {
 	private JButton btnAddAUser;
 
 	
-	String[] filters = { "ID", "Name", "Surname", "E-mail"};
+	String[] filters = { "ID", "Name", "Surname", "Email", "Nationality","City","Phone number"};  //,"Birthdate"};
 	private JComboBox<String> filterComboBox = new JComboBox(filters);
+	String[] match = { "Full match", "Beginning", "Contains"};
+	private JComboBox<String> matchComboBox = new JComboBox<String>(match);
 
 	private String[] columnNamesUsers = new String[] {
 			ResourceBundle.getBundle("Etiquetas").getString("ID"), 
 			ResourceBundle.getBundle("Etiquetas").getString("Name"), 
 			ResourceBundle.getBundle("Etiquetas").getString("Surname"), 
 			ResourceBundle.getBundle("Etiquetas").getString("Email"), 
-			ResourceBundle.getBundle("Etiquetas").getString("Status"), 
+			ResourceBundle.getBundle("Etiquetas").getString("Country"), 
+			ResourceBundle.getBundle("Etiquetas").getString("City"), 
+			ResourceBundle.getBundle("Etiquetas").getString("Address"), 
+			ResourceBundle.getBundle("Etiquetas").getString("PhoneNumber"), 
+			ResourceBundle.getBundle("Etiquetas").getString("Birthdate"), 
+			ResourceBundle.getBundle("Etiquetas").getString("JoinDate"), 
+			ResourceBundle.getBundle("Etiquetas").getString("LastLogin"), 
+			ResourceBundle.getBundle("Etiquetas").getString("Status"),
 			"", ""
 	};
 		
@@ -138,6 +155,22 @@ public class userManagementPanel extends JPanel {
 		gbc_searchField.gridy = 3;
 		add(searchField, gbc_searchField);
 		searchField.setColumns(10);
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				search.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				search.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				search.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
+			}
+		});
 
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
@@ -157,14 +190,29 @@ public class userManagementPanel extends JPanel {
 		gbc_filterComboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_filterComboBox.gridx = 8;
 		gbc_filterComboBox.gridy = 3;
+		add(filterComboBox, gbc_filterComboBox);
 		
+		GridBagConstraints gbc_comboboxMatch = new GridBagConstraints();
+		gbc_comboboxMatch.insets = new Insets(0, 0, 5, 5);
+		gbc_comboboxMatch.gridx = 9;
+		gbc_comboboxMatch.gridy = 3;
+		add(matchComboBox, gbc_comboboxMatch);
+
 		GridBagConstraints gbc_chckbxCasesSensitive = new GridBagConstraints();
 		gbc_chckbxCasesSensitive.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxCasesSensitive.gridx = 9;
+		gbc_chckbxCasesSensitive.gridx = 10;
 		gbc_chckbxCasesSensitive.gridy = 3;
 		chckbxCasesSensitive.setBackground(new Color(245, 245, 245));
 		add(chckbxCasesSensitive, gbc_chckbxCasesSensitive);
-
+		chckbxCasesSensitive.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				search.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+			}
+		});
+		
+		
+		
 		GridBagConstraints gbc_showingCountLabel = new GridBagConstraints();
 		gbc_showingCountLabel.gridwidth = 5;
 		gbc_showingCountLabel.insets = new Insets(0, 0, 5, 5);
@@ -203,16 +251,21 @@ public class userManagementPanel extends JPanel {
 		gbc_scrollPane.gridy = 5;
 		add(scrollPane, gbc_scrollPane);
 		scrollPane.setViewportView(userTable);
+		
+		matchComboBox.setFont(new Font("Tahoma", Font.BOLD, 11));
+		matchComboBox.setForeground(Color.BLACK);
+		matchComboBox.setBackground(new Color(245, 245, 245));
+		matchComboBox.addActionListener(search);
+		
 		filterComboBox.setFont(new Font("Tahoma", Font.BOLD, 11));
 		filterComboBox.setForeground(Color.BLACK);
-		filterComboBox.setBackground(UIManager.getColor("ComboBox.buttonBackground"));
+		filterComboBox.setBackground(new Color(245, 245, 245));
+		filterComboBox.addActionListener(search);
 			
-		add(filterComboBox, gbc_filterComboBox);
-		
 		btnNextPage.setEnabled(false);
 		btnPrevPage.setEnabled(false);
 
-		searchListener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
+		search.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
 	}
 
 	
@@ -225,7 +278,9 @@ public class userManagementPanel extends JPanel {
 			btnSearch.setFocusPainted(false);
 			try {
 				btnSearch.setIcon(new ImageIcon(ImageIO.read(new File("images/searchicon2.png"))));
-				btnSearch.addActionListener(searchListener);
+				btnSearch.addActionListener(search);
+				btnSearch.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "search");
+				btnSearch.getActionMap().put("search", search);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -234,18 +289,19 @@ public class userManagementPanel extends JPanel {
 		return btnSearch;
 	}
 	
-	ActionListener searchListener =new ActionListener() {
+	AbstractAction search =new AbstractAction() {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			btnNextPage.setEnabled(false);
 			searchinput = searchField.getText();		
-			searchfilter = filterComboBox.getSelectedIndex();
+			searchfilter = (String)filterComboBox.getSelectedItem();
 
 			//restart model
 			userTableModel.setDataVector(null, columnNamesUsers);
 			userTableModel.setColumnCount(7); 
 
 			//perform search and create the table model with the results
-			searchResult=facade.searchByCriteria(searchinput,searchfilter,chckbxCasesSensitive.isSelected());		
+			searchResult=facade.searchByCriteria(searchinput,searchfilter,chckbxCasesSensitive.isSelected(),matchComboBox.getSelectedIndex());		
 			loadPage(1);
 			if(searchResult.size() > PAGESIZE){
 				btnNextPage.setEnabled(true);
@@ -267,7 +323,7 @@ public class userManagementPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					RegisterGUI j = new RegisterGUI(true);
 					j.setVisible(true);
-					searchListener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
+					search.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
 				}
 			});
 		}
@@ -378,16 +434,22 @@ public class userManagementPanel extends JPanel {
 		{
 			int row = userTable.getSelectedRow();
 			EditUserGUI j = new EditUserGUI((String)userTable.getValueAt(row, 0), (String)userTable.getValueAt(row, 1), 
-					(String)userTable.getValueAt(row, 2),(String)userTable.getValueAt(row, 3), (String)userTable.getValueAt(row, 4));
+					(String)userTable.getValueAt(row, 2),(String)userTable.getValueAt(row, 3),(String)userTable.getValueAt(row, 4), (String)userTable.getValueAt(row, 5),
+					(String)userTable.getValueAt(row, 6),(String)userTable.getValueAt(row, 7),(String)userTable.getValueAt(row, 8),(String)userTable.getValueAt(row, 11));
 			j.setVisible(true);
-
+			
 			//update row with new info
 			String[] newData = j.newData();
-			userTable.setValueAt(newData[0], row, 0);
-			userTable.setValueAt(newData[1], row, 1);
-			userTable.setValueAt(newData[2], row, 2);
-			userTable.setValueAt(newData[3], row, 3);
-			userTable.setValueAt(newData[4], row, 4);
+			userTable.setValueAt(newData[0], row, 0); //ID
+			userTable.setValueAt(newData[1], row, 1); //name
+			userTable.setValueAt(newData[2], row, 2); //Surname
+			userTable.setValueAt(newData[3], row, 3); //Email
+			userTable.setValueAt(newData[4], row, 4); //Country
+			userTable.setValueAt(newData[5], row, 5); //City
+			userTable.setValueAt(newData[6], row, 6); //Address
+			userTable.setValueAt(newData[7], row, 7); //Phone number
+			userTable.setValueAt(newData[8], row, 8); //birthdate
+			userTable.setValueAt(newData[9], row, 11); //Status
 		}
 	};
 
@@ -399,11 +461,11 @@ public class userManagementPanel extends JPanel {
 	 */
 	public int loadPage(int pageNumber) {
 		userTableModel.setDataVector(null, columnNamesUsers);
-		userTableModel.setColumnCount(7); 
+		userTableModel.setColumnCount(14); 
 		int elementsOnPage = 0;
 		int index = (pageNumber-1)*PAGESIZE;
 		int remainingelements = searchResult.size() - index;
-		while(elementsOnPage<PAGESIZE && elementsOnPage<remainingelements) {
+		while((elementsOnPage < PAGESIZE) && (elementsOnPage < remainingelements)) {
 			addUserToTable(searchResult.get(index+elementsOnPage));
 			elementsOnPage++;
 		}
@@ -420,20 +482,25 @@ public class userManagementPanel extends JPanel {
 		userTable.getColumnModel().getColumn(2).setPreferredWidth(75);
 		userTable.getColumnModel().getColumn(3).setPreferredWidth(160);
 		userTable.getColumnModel().getColumn(4).setPreferredWidth(50);
-		userTable.getColumnModel().getColumn(5).setPreferredWidth(5);
-		userTable.getColumnModel().getColumn(6).setPreferredWidth(5);
-
-
+		userTable.getColumnModel().getColumn(5).setPreferredWidth(75);
+		userTable.getColumnModel().getColumn(6).setPreferredWidth(160);
+		userTable.getColumnModel().getColumn(7).setPreferredWidth(75);
+		userTable.getColumnModel().getColumn(8).setPreferredWidth(75);
+		userTable.getColumnModel().getColumn(9).setPreferredWidth(75);
+		userTable.getColumnModel().getColumn(10).setPreferredWidth(75);
+		userTable.getColumnModel().getColumn(11).setPreferredWidth(75);
+		userTable.getColumnModel().getColumn(12).setPreferredWidth(30);
+		userTable.getColumnModel().getColumn(13).setPreferredWidth(30);
 
 		//Table sorting settings (edit and delete button collums sorting disabled)
 		TableRowSorter<NonEditableTableModel> sorter = new TableRowSorter<NonEditableTableModel>(userTableModel);
 
-		sorter.setSortable(5, false);
-		sorter.setSortable(6, false);
+		sorter.setSortable(12, false);
+		sorter.setSortable(13, false);
 		userTable.setRowSorter(sorter);
 		
-		ButtonColumn editButtonColumn = new ButtonColumn(userTable, edit, 5, new Color(51,51,51));
-		ButtonColumn deleteButtonColumn = new ButtonColumn(userTable, delete, 6, new Color(255,0,51));
+		ButtonColumn editButtonColumn = new ButtonColumn(userTable, edit, 12, new Color(51,51,51));
+		ButtonColumn deleteButtonColumn = new ButtonColumn(userTable, delete, 13, new Color(255,0,51));
 		editButtonColumn.setMnemonic(KeyEvent.VK_E);
 		deleteButtonColumn.setMnemonic(KeyEvent.VK_D);
 		return elementsOnPage;
@@ -444,11 +511,26 @@ public class userManagementPanel extends JPanel {
 	 * @param u		User to insert.
 	 */
 	public void addUserToTable(User u) {
+		
+	    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+	    SimpleDateFormat dfh = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 		Vector<Object> row = new Vector<Object>();
 		row.add(u.getID());
 		row.add(u.getProfile().getName());
 		row.add(u.getProfile().getSurname());
 		row.add(u.getProfile().getEmail());
+		row.add(u.getProfile().getNationality().getString());
+		row.add(u.getProfile().getCity());
+		row.add(u.getProfile().getAddress());
+		row.add(u.getProfile().getPhonenumber());
+		row.add(df.format(u.getProfile().getBirthdate()));
+		row.add(dfh.format(u.getRegistrationdate()));
+		if(u.getLastlogin() != null) {
+			row.add(dfh.format(u.getLastlogin()));
+		}
+		else {
+			row.add("Never");
+		}
 		row.add(u.statusToString());
 		try {
 			row.add(new ImageIcon(ImageIO.read(new File("images/edit1.png"))));
@@ -472,7 +554,7 @@ public class userManagementPanel extends JPanel {
 	
 		public boolean isCellEditable (int row, int column)
 		{
-			if(column == 5 || column==6) {
+			if(column == 11 || column==12) {
 				return true;
 			}
 			return false;

@@ -2,6 +2,7 @@ package gui;
 
 
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 import businessLogic.BLFacade;
 import exceptions.invalidID;
@@ -10,8 +11,9 @@ import gui.components.HintPassField;
 import gui.components.HintTextField;
 import gui.components.passVisibleLabel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -21,6 +23,8 @@ import java.awt.Image;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import gui.components.cancelLabel;
 import java.awt.FlowLayout;
@@ -88,7 +92,7 @@ public class LoginGUI extends JDialog {
 		titleLabel.setForeground(new Color(153, 153, 153));
 		titleLabel.setOpaque(false);
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		titleLabel.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 27));
+		titleLabel.setFont(new Font("Source Code Pro Light", Font.BOLD, 27));
 		
 		usernameErrorLabel = new JLabel("");
 		usernameErrorLabel.setFont(new Font("Source Code Pro", Font.BOLD, 13));
@@ -118,24 +122,40 @@ public class LoginGUI extends JDialog {
 		loginButton.setForeground(new Color(255, 255, 255));
 		loginButton.setBackground(new Color(102, 102, 102));
 		loginButton.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 18));
-		loginButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				usernameErrorLabel.setText("");
+		
+		Action login = new AbstractAction() {
+		    public void actionPerformed(ActionEvent e) {
+		    	usernameErrorLabel.setText("");
 				passErrorLabel.setText("");
 				String username = usernameTextField.getText();
 				String pass =  new String (passwordField.getPassword());
 				try {
 					status = facade.checkCredentials(username, pass);
 					JOptionPane.showMessageDialog(null, "Login successful");
+					if(status != null) {
+						MainGUI.getInstance().resetPanels();
+						if(status) {
+							MainGUI.getInstance().adminView();
+						}
+						else {
+							MainGUI.getInstance().userView();
+						}	
+					}	
 					dispose();
-				} catch (invalidID e) {
-					usernameErrorLabel.setText(e.getMessage());
-				} catch (invalidPW e) {
-					passErrorLabel.setText(e.getMessage());
+				} catch (invalidID i) {
+					usernameErrorLabel.setText(i.getMessage());
+				} catch (invalidPW i) {
+					passErrorLabel.setText(i.getMessage());
 				}
-			}
-		});
+				catch (Exception e2) {
+					System.err.println("Error occurred trying to log in");
+				}
+		    }
+		};
+		loginButton.addActionListener(login);
+		//keybinding for enter button
+		loginButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "login");
+		loginButton.getActionMap().put("login", login);
 		contentPane.add(loginButton);
 
 		panel_1 = new JPanel();
@@ -160,7 +180,7 @@ public class LoginGUI extends JDialog {
 		registerLabel.setBackground(new Color(153, 153, 153));
 		registerLabel.setFont(new Font("Source Code Pro ExtraLight", Font.BOLD, 14));
 		registerLabel.setForeground(new Color(204, 204, 204));
-		registerLabel.setBounds(20, 313, 147, 37);
+		registerLabel.setBounds(20, 313, 176, 37);
 		contentPane.add(registerLabel);
 
 		
@@ -204,7 +224,7 @@ public class LoginGUI extends JDialog {
 		
 		//Width:551.0
 		//Height:422.0
-		
+		//Background image
 		ImageIcon background = new ImageIcon("images/background/black.jpg");
 		Image img = background.getImage();
 		Image tenp = img.getScaledInstance(551, 442, Image.SCALE_SMOOTH);
@@ -213,7 +233,6 @@ public class LoginGUI extends JDialog {
 		back.setLayout(null);
 		back.setBounds(0,0,551,442);
 		contentPane.add(back);
-		
 	}
 	
 	

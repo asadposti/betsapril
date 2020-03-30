@@ -1,10 +1,7 @@
 package gui;
 
-import java.awt.Color;
 import java.net.URL;
 import java.util.Locale;
-
-import javax.swing.UIManager;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
@@ -20,10 +17,8 @@ public class ApplicationLauncher {
 	public static void main(String[] args) {
 
 		ConfigXML c=ConfigXML.getInstance();
-	
-		System.out.println(c.getLocale());
 		
-		Locale.setDefault(new Locale(c.getLocale()));
+		Locale.setDefault(new Locale("eur"));
 		
 		System.out.println("Locale: "+Locale.getDefault());
 		
@@ -37,7 +32,7 @@ public class ApplicationLauncher {
 			BLFacade appFacadeInterface;
 //			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
 //			UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 			if (c.isBusinessLogicLocal()) {
 				
 			 appFacadeInterface=new BLFacadeImplementation();

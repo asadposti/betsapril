@@ -14,12 +14,15 @@ import javax.swing.JTextArea;
 
 import businessLogic.BLFacade;
 import domain.Bet;
+import domain.Profile;
 import gui.MainGUI;
 
 import java.awt.Color;
 
 public class ProfilePanel extends JPanel {
 
+	private Profile profile;
+	private BLFacade facade = MainGUI.getBusinessLogic();
 	/**
 	 * Create the panel.
 	 */
@@ -27,14 +30,15 @@ public class ProfilePanel extends JPanel {
 		setBackground(Color.WHITE);
 
 		BLFacade facade = MainGUI.getBusinessLogic();
-		
+		profile = facade.getProfile();
+
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{20, 0, 45, 0, 40, 0, 61, 20, 0};
 		gbl_contentPane.rowHeights = new int[]{20, 0, 25, 25, 25, 25, 124, 15, 0, 20, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gbl_contentPane);
-		
+
 		JLabel lblUserProfile = new JLabel("User Profile");
 		lblUserProfile.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_lblUserProfile = new GridBagConstraints();
@@ -42,7 +46,7 @@ public class ProfilePanel extends JPanel {
 		gbc_lblUserProfile.gridx = 1;
 		gbc_lblUserProfile.gridy = 1;
 		add(lblUserProfile, gbc_lblUserProfile);
-		
+
 		JLabel lblUsername = new JLabel("Username:");
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 		gbc_lblUsername.anchor = GridBagConstraints.WEST;
@@ -50,9 +54,9 @@ public class ProfilePanel extends JPanel {
 		gbc_lblUsername.gridx = 1;
 		gbc_lblUsername.gridy = 3;
 		add(lblUsername, gbc_lblUsername);
-		
+
 		JTextArea textArea = new JTextArea();
-		textArea.setText(facade.getProfile().getID());
+
 		textArea.setBackground(SystemColor.menu);
 		textArea.setEditable(false);
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
@@ -61,7 +65,7 @@ public class ProfilePanel extends JPanel {
 		gbc_textArea.gridx = 2;
 		gbc_textArea.gridy = 3;
 		add(textArea, gbc_textArea);
-		
+
 		JLabel lblAvailableMoney = new JLabel("Available money:");
 		GridBagConstraints gbc_lblAvailableMoney = new GridBagConstraints();
 		gbc_lblAvailableMoney.gridwidth = 2;
@@ -70,9 +74,9 @@ public class ProfilePanel extends JPanel {
 		gbc_lblAvailableMoney.gridx = 4;
 		gbc_lblAvailableMoney.gridy = 3;
 		add(lblAvailableMoney, gbc_lblAvailableMoney);
-		
+
 		JTextArea textArea_3 = new JTextArea();
-		textArea_3.setText(String.valueOf(facade.getProfile().getCash()));
+
 		textArea_3.setBackground(SystemColor.menu);
 		textArea_3.setEditable(false);
 		GridBagConstraints gbc_textArea_3 = new GridBagConstraints();
@@ -81,7 +85,7 @@ public class ProfilePanel extends JPanel {
 		gbc_textArea_3.gridx = 6;
 		gbc_textArea_3.gridy = 3;
 		add(textArea_3, gbc_textArea_3);
-		
+
 		JLabel lblName = new JLabel("Name:");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.WEST;
@@ -89,9 +93,9 @@ public class ProfilePanel extends JPanel {
 		gbc_lblName.gridx = 1;
 		gbc_lblName.gridy = 4;
 		add(lblName, gbc_lblName);
-		
+
 		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setText(facade.getProfile().getName());
+
 		textArea_1.setBackground(SystemColor.menu);
 		textArea_1.setEditable(false);
 		GridBagConstraints gbc_textArea_1 = new GridBagConstraints();
@@ -100,7 +104,7 @@ public class ProfilePanel extends JPanel {
 		gbc_textArea_1.gridx = 2;
 		gbc_textArea_1.gridy = 4;
 		add(textArea_1, gbc_textArea_1);
-		
+
 		JLabel lblLastName = new JLabel("Surname:");
 		GridBagConstraints gbc_lblLastName = new GridBagConstraints();
 		gbc_lblLastName.gridwidth = 2;
@@ -109,9 +113,9 @@ public class ProfilePanel extends JPanel {
 		gbc_lblLastName.gridx = 4;
 		gbc_lblLastName.gridy = 4;
 		add(lblLastName, gbc_lblLastName);
-		
+
 		JTextArea textArea_2 = new JTextArea();
-		textArea_2.setText(facade.getProfile().getSurname());
+
 		textArea_2.setBackground(SystemColor.menu);
 		textArea_2.setEditable(false);
 		GridBagConstraints gbc_textArea_2 = new GridBagConstraints();
@@ -120,7 +124,7 @@ public class ProfilePanel extends JPanel {
 		gbc_textArea_2.gridx = 6;
 		gbc_textArea_2.gridy = 4;
 		add(textArea_2, gbc_textArea_2);
-		
+
 		JLabel lblActiveBets = new JLabel("Active bets:");
 		GridBagConstraints gbc_lblActiveBets = new GridBagConstraints();
 		gbc_lblActiveBets.anchor = GridBagConstraints.WEST;
@@ -128,7 +132,7 @@ public class ProfilePanel extends JPanel {
 		gbc_lblActiveBets.gridx = 1;
 		gbc_lblActiveBets.gridy = 5;
 		add(lblActiveBets, gbc_lblActiveBets);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridwidth = 6;
@@ -137,20 +141,23 @@ public class ProfilePanel extends JPanel {
 		gbc_scrollPane.gridx = 1;
 		gbc_scrollPane.gridy = 6;
 		add(scrollPane, gbc_scrollPane);
-		
 
-	
-		  DefaultListModel<String> list = 
-				new DefaultListModel<String>();
-		  for (Bet v : facade.retrieveBets()) {
-			  list.addElement(""+"Your Bet Amount:>  "+v.getAmount()+"  "+"And Your Question:>  "+
-		  v.getQuestion().getQuestion());
-			  }
-		  JList<String> model = 
-					new JList<String>(list);
-		  
-		scrollPane.setViewportView(model);
-		
+		if(profile != null) {
+			textArea.setText(profile.getID());
+			textArea_2.setText(profile.getSurname());
+			textArea_1.setText(profile.getName());
+			textArea_3.setText(String.valueOf(facade.getCash()));
+
+
+			DefaultListModel<String> list = new DefaultListModel<String>();
+			for (Bet v : facade.retrieveBets()) {
+				list.addElement(""+"Your Bet Amount:>  "+v.getAmount()+"  "+"And Your Question:>  "+
+						v.getPredictions().get(0).getQuestion()); 
+
+				JList<String> model = new JList<String>(list);
+
+				scrollPane.setViewportView(model);
+			}
+		}
 	}
-
 }

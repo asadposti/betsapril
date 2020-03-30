@@ -5,15 +5,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 //import domain.Booking;
 import domain.Question;
+import domain.Sport;
 import domain.User;
 import domain.Feedback.FeedbackType;
+import domain.Prediction;
 import domain.Bet;
+import domain.BetType;
+import domain.Competition;
 import domain.Event;
-import domain.Gender;
-import domain.Nationality;
+import domain.Country;
 import domain.Profile;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
@@ -43,7 +47,7 @@ public interface BLFacade  {
 	 * @throws EventFinished if current data is after data of the event
  	 * @throws QuestionAlreadyExist if the same question already exists for the event
 	 */
-	@WebMethod Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws EventFinished, QuestionAlreadyExist;
+	@WebMethod Question createQuestion(Event event, String question, float betMinimum,  List<Prediction> prediction) throws EventFinished, QuestionAlreadyExist;
 	
 	
 	/**
@@ -55,6 +59,14 @@ public interface BLFacade  {
 	@WebMethod public Vector<Event> getEvents(Date date);
 	
 	/**
+	 * This method retrieves the events of a given date and sport 
+	 * 
+	 * @param date in which events are retrieved
+	 * @return collection of events
+	 */
+	@WebMethod public Vector<Event> getEvents(Date date, Sport sport);
+	
+	/**
 	 * This method retrieves from the database the dates a month for which there are events
 	 * 
 	 * @param date of the month for which days with events want to be retrieved 
@@ -62,6 +74,22 @@ public interface BLFacade  {
 	 */
 	@WebMethod public Vector<Date> getEventsMonth(Date date);
 	
+	
+	/**
+	 * This method retrieves from the database the dates a month for which there are events for the given competition
+	 * 
+	 * @param date of the month for which days with events want to be retrieved 
+	 * @return collection of dates
+	 */
+	@WebMethod public Vector<Date> getEventsMonth(Date date, Competition competition);
+	
+	/**
+	 * 
+	 * @param sport
+	 * @return
+	 */
+	@WebMethod public Vector<Competition> getCompetitions(Sport sport);
+
 	/**
 	 * This method registers a new user.
 	 * 
@@ -74,8 +102,8 @@ public interface BLFacade  {
 	 * 
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
-	@WebMethod public void registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
-			Nationality nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID;
+	@WebMethod public void registerUser(String iD, String password, String name, String surname, String email, String address, String phone, 
+			Country nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID;
 
 	/**
 	 * This methods checks the validity of the credentials (id / password) inputed upon login.
@@ -95,7 +123,7 @@ public interface BLFacade  {
 	 * @param Email
 	 * @return
 	 */ 
-	@WebMethod public List<User> searchByCriteria(String searchtext, int filter, boolean casesensitive);
+	@WebMethod public List<User> searchByCriteria(String searchtext, String filter, boolean casesensitive, int match);
 	
 	/**
 	 * 
@@ -111,14 +139,15 @@ public interface BLFacade  {
 	 * @param filter
 	 * @return
 	 */
-	@WebMethod public void updateUserInfo(String key, String ID,String name,String surname, String email,boolean isAdmin) throws invalidID;
+	@WebMethod public void updateUserInfo(String key, String iD, String name, String surname, String email,Country nat,String city, String addr, 
+			String phn,  Date birthdt, boolean isAdmin) throws invalidID;
 	
 	/**
 	 * 
 	 * @param q
 	 * @param amount
 	 */
-	@WebMethod public void placeBet(Question q, String ID, float amount, int answer)throws InsufficientCash;
+	@WebMethod public void placeBets(float stake, BetType type, List<Prediction> predictions) throws InsufficientCash;
 	
 	/**
 	 * This method calls the data access to initialize the database with some events and questions.
@@ -138,8 +167,8 @@ public interface BLFacade  {
 	public void logOut();
 	
 	/**
-	 * Retrieves the bets the currently logged suer has in place
-	 * @return		List<Bet> user's bets
+	 * Retrieves the coupons the currently logged user has in place
+	 * @return		List<Coupon> user's bets
 	 */
 	public List<Bet> retrieveBets();
 	
@@ -156,18 +185,36 @@ public interface BLFacade  {
 	public boolean isAdmin();
 	
 	/**
+	 * Returns cash currently stored on the user account.
+	 * @return  current cash amount.
+	 */
+	public float getCash();
+	
+	/**
+	 * Retrieves the currently logged users ID
+	 * @return ID field value of the logged user
+	 */
+	public String getUserID();
+		
+	/**
 	 * Adds introduced amount the cash stored on the user's account
 	 * @param amount	amount of money to add(float)
 	 * @return	cash on the account after the addition
 	 */
 	public float addCash(float amount);
 	
+	/**
+	 * 
+	 * @param fbtype
+	 * @param email
+	 * @param name
+	 * @param summary
+	 * @param details
+	 * @param file
+	 */
 	public void submitFeedback(FeedbackType fbtype, String email, String name, String summary, String details, File file);
 
-
-	ArrayList<String> getQuestionAnswers(int questionId) throws QuestionNotFound, NoAnswers;
-
-
-	ArrayList<Float> getOdds(int questionId) throws QuestionNotFound, NoAnswers;
+	
+	public List<Prediction> getQuestionPredictions(int questionId) throws QuestionNotFound, NoAnswers;
 	
 }

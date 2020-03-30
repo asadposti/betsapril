@@ -35,7 +35,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import javax.swing.JRadioButton;
 
-public class FeedbackPanel<E> extends JPanel {
+public class FeedbackPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -84,7 +84,8 @@ public class FeedbackPanel<E> extends JPanel {
 	 */
 	public FeedbackPanel() {
 		setBackground(Color.WHITE);
-		setLayout(new MigLayout("", "[30px:n][67.00][39.00][34.00][18.00][][77.00,trailing][100px,grow][208.00][57.00][30px:50.00]", "[-23.00][20px:5.00][1.00][20px:n:20px][24.00,grow][53.00][20px:9.00][55.00][1.00][25px:40.00,fill][][10px:n][][400px,grow][-154.00][10px:n][7.00][10px:89.00][30px:n]"));
+		setLayout(new MigLayout("", "[30px:n][67.00][39.00][34.00][18.00][][77.00,trailing][100px,grow][230.00][57.00][30px:50.00]", 
+				"[-23.00][20px:5.00][1.00][20px:n:20px][24.00,grow][53.00][20px:9.00][55.00][1.00][25px:40.00,fill][][10px:n][][400px,grow][-154.00][10px:n][7.00][10px:26.00:26.00][30px:n]"));
 
 
 
@@ -110,7 +111,7 @@ public class FeedbackPanel<E> extends JPanel {
 
 		nameLabel = new JLabel("Your name:");
 		nameLabel.setFont(new Font("Source Sans Pro ExtraLight", Font.BOLD, 13));
-		nameLabel.setBounds(0, 0, 81, 23);
+		nameLabel.setBounds(0, 0, 198, 23);
 		pinfoPanel.add(nameLabel);
 
 		TellUsLabel = new JLabel("Tell us about it");
@@ -131,7 +132,7 @@ public class FeedbackPanel<E> extends JPanel {
 
 		lblYourEmailAddress = new JLabel("Your email address:");
 		lblYourEmailAddress.setFont(new Font("Source Sans Pro ExtraLight", Font.BOLD, 13));
-		lblYourEmailAddress.setBounds(0, 43, 116, 23);
+		lblYourEmailAddress.setBounds(0, 43, 198, 23);
 		pinfoPanel.add(lblYourEmailAddress);
 
 		sumwcLabel = new JLabel("0/" + MAXSUMMARY );
@@ -334,10 +335,6 @@ public class FeedbackPanel<E> extends JPanel {
 				}
 			}
 		});
-
-
-
-
 		if(MainGUI.getBusinessLogic().isLoggedIn()){
 			pinfoPanel.setVisible(false);
 		}
@@ -346,7 +343,7 @@ public class FeedbackPanel<E> extends JPanel {
 	//AUXILIARY CLASSES
 
 	/**
-	 * Keylistener that will limit the amount of characted that can be written in the JTextComponents
+	 * Keylistener that will limit the amount of characters that can be written in the JTextComponents
 	 */
 	private class charLimitListener implements KeyListener{
 

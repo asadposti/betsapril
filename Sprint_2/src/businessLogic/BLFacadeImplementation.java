@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -14,13 +15,16 @@ import configuration.ConfigXML;
 import dataAccess.DataAccess;
 import dataAccess.DataAccessImplementation;
 import domain.Question;
+import domain.Sport;
 import domain.User;
 import domain.Feedback.FeedbackType;
+import domain.Prediction;
 import domain.Bet;
+import domain.BetType;
+import domain.Competition;
 import domain.Event;
 import domain.Feedback;
-import domain.Gender;
-import domain.Nationality;
+import domain.Country;
 import domain.Profile;
 import exceptions.EventFinished;
 import exceptions.InsufficientCash;
@@ -40,7 +44,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	private Date sessionstart;
 
 
-	public BLFacadeImplementation()  {		
+	public BLFacadeImplementation()  {	
 		System.out.println("Creating BLFacadeImplementation instance");
 		ConfigXML c=ConfigXML.getInstance();
 
@@ -52,7 +56,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 
-	/**
+	/** 
 	 * This method creates a question for an event, with a question text and the minimum bet
 	 * 
 	 * @param event to which question is added
@@ -63,7 +67,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @throws QuestionAlreadyExist if the same question already exists for the event
 	 */
 	@WebMethod
-	public Question createQuestion(Event event, String question, float betMinimum, ArrayList<String> answers, ArrayList<Float> odds) throws EventFinished, QuestionAlreadyExist{
+	public Question createQuestion(Event event, String question, float betMinimum,  List<Prediction> predictions) throws EventFinished, QuestionAlreadyExist{
 
 		//The minimum bed must be greater than 0
 		DataAccess dBManager=new DataAccessImplementation();	    
@@ -72,7 +76,7 @@ public class BLFacadeImplementation  implements BLFacade {
 			throw new EventFinished(ResourceBundle.getBundle("Etiquetas").getString("ErrorEventHasFinished"));
 		}	
 		try {
-			Question qry=dBManager.createQuestion(event,question,betMinimum, answers, odds);	
+			Question qry=dBManager.createQuestion(event,question,betMinimum, predictions);	
 			dBManager.close();
 			return qry;
 		}
@@ -97,6 +101,20 @@ public class BLFacadeImplementation  implements BLFacade {
 		return events;
 	}
 
+	/**
+	 * This method invokes the data access to retrieve the events of a given date and sport
+	 * 
+	 * @param date in which events are retrieved
+	 * @param sport to look for
+	 * @return collection of events
+	 */
+	@WebMethod	
+	public Vector<Event> getEvents(Date date, Sport sport)  {
+		DataAccess dbManager=new DataAccessImplementation();
+		Vector<Event>  events=dbManager.getEvents(date, sport);
+		dbManager.close();
+		return events;
+	}
 
 	/**
 	 * This method invokes the data access to retrieve the dates a month for which there are events
@@ -112,6 +130,33 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 	/**
+	 * This method invokes the data access to retrieve the dates a month for which there are events for the given competition
+	 * 
+	 * @param date of the month for which days with events want to be retrieved 
+	 * @param competition to look for
+	 * @return collection of dates
+	 */
+	@WebMethod public Vector<Date> getEventsMonth(Date date, Competition competition) {
+		Vector<Date>  dates = null;
+		if(competition != null) {
+			DataAccess dbManager=new DataAccessImplementation();
+			dates=dbManager.getEventsMonth(date, competition);
+			dbManager.close();	
+		}
+		else {
+			dates = new Vector<Date>();
+		}
+		return dates;
+	}
+	
+	@WebMethod public Vector<Competition> getCompetitions(Sport sport){
+		DataAccess dbManager=new DataAccessImplementation();
+		Vector<Competition>  events=dbManager.getCompetitions(sport);
+		dbManager.close();
+		return events;
+	}
+	
+	/**
 	 * This method registers a new user.
 	 * 
 	 * @param iD				ID of the new user.
@@ -124,12 +169,12 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @throws invalidID		exception thrown when there is a pre existing user with this ID in the database.
 	 */
 	@WebMethod
-	public void registerUser(String iD, String password, String name, String surname, String email, String address, Gender g, String phone, 
-			Nationality nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID{
+	public void registerUser(String iD, String password, String name, String surname, String email, String address, String phone, 
+			Country nat, String city, Date birthDate, String pic, boolean isAdmin) throws invalidID{
 
 		DataAccess dBManager=new DataAccessImplementation();
 		try {
-			dBManager.registerUser(iD, password, name, surname, email, address, g, phone, nat, city, birthDate, pic, isAdmin);
+			dBManager.registerUser(iD, password, name, surname, email, address, phone, nat, city, birthDate, pic, isAdmin);
 			dBManager.close();
 		}
 		catch (invalidID i) {
@@ -169,9 +214,9 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * 
 	 */
 	@Override
-	public List<User> searchByCriteria(String searchtext, int filter, boolean casesensitive) {
+	public List<User> searchByCriteria(String searchtext, String filter, boolean casesensitive, int match) {
 		DataAccess dbManager = new DataAccessImplementation();
-		List<User> searchResult = dbManager.retrieveUsersByCriteria(searchtext, filter, casesensitive);
+		List<User> searchResult = dbManager.retrieveUsersByCriteria(searchtext, filter, casesensitive,match);
 		dbManager.close();
 		return searchResult;
 	}
@@ -189,11 +234,11 @@ public class BLFacadeImplementation  implements BLFacade {
 	/**
 	 * 
 	 */
-	@Override
-	public void updateUserInfo(String key, String ID, String name, String surname, String email, boolean isAdmin) throws invalidID{
+	public void updateUserInfo(String key, String iD, String name, String surname, String email,Country nat,String city, String addr, 
+			String phn,  Date birthdt, boolean isAdmin) throws invalidID{
 		DataAccess dbManager = new DataAccessImplementation();
 		try {	
-			dbManager.updateUserInfo(key, ID,name,surname,email,isAdmin);
+			dbManager.updateUserInfo(key, iD,name,surname,email,addr,phn,nat,city,birthdt,isAdmin);
 			dbManager.close();
 		}
 		catch(invalidID i) {
@@ -215,13 +260,13 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 
-	public void placeBet(Question q, String ID, float amount, int answer) throws InsufficientCash{
-		if(amount > loggeduser.getProfile().getCash()) {
+	public void placeBets(float stake, BetType type, List<Prediction> predictions) throws InsufficientCash{
+		if(stake > loggeduser.getCash()) {
 			throw new InsufficientCash();
 		}
 		else {
 			DataAccessImplementation dbManager=new DataAccessImplementation();
-			dbManager.recordBet(q, ID, amount, answer);
+			dbManager.recordBets(loggeduser, stake, type, predictions);
 			dbManager.close();
 		}
 
@@ -236,11 +281,24 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 	/**
+	 * Retrieves the currently logged users ID
+	 * @return ID field value of the logged user
+	 */
+	public String getUserID() {
+		return loggeduser.getID();
+	}
+	
+	/**
 	 * Retrieves the bets the currently logged user has in place
 	 * @return		List<Bet> user's bets
 	 */
 	public List<Bet> retrieveBets(){
-		return loggeduser.getBets();
+		if(isLoggedIn()) {
+			return loggeduser.getBets();
+		}
+		else {
+			return null;
+		}
 	}
 
 	/**
@@ -256,7 +314,12 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * @return	Profile object containing information about the user
 	 */
 	public Profile getProfile() {
-		return loggeduser.getProfile();
+		if(isLoggedIn()) {
+			return loggeduser.getProfile();
+		}
+		else {
+			return null;	
+		}
 	}
 
 	/**
@@ -267,6 +330,14 @@ public class BLFacadeImplementation  implements BLFacade {
 		return loggeduser.isAdmin();
 	}
 
+	/**
+	 * Returns cash currently stored on the user account.
+	 * @return  current cash amount.
+	 */
+	public float getCash() {
+		return loggeduser.getCash();
+	}
+	
 	/**
 	 * Adds introduced amount the cash stored on the user's account
 	 * @param amount	amount of money to add(float)
@@ -287,32 +358,17 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 
-	@Override
-	public ArrayList<String> getQuestionAnswers(int questionId) throws QuestionNotFound, NoAnswers {
-		// TODO Auto-generated method stub
+	public List<Prediction> getQuestionPredictions(int questionId) throws QuestionNotFound, NoAnswers {
 		DataAccessImplementation dbManager = new DataAccessImplementation();
 		try {
-			ArrayList<String> ans = dbManager.getQuestionAnswersByQuestionID(questionId);
+			List<Prediction> pred = dbManager.getQuestionPredictions(questionId);
 			dbManager.close();
-			return ans;
+			return pred;
 		} catch (NoAnswers e) {
-			// TODO: handle exception
+			dbManager.close();
 			throw new NoAnswers(e.getMessage());
 		}
 		
-	}
-
-
-	@Override
-	public ArrayList<Float> getOdds(int questionId) throws QuestionNotFound,NoAnswers {
-		DataAccessImplementation dbManager = new DataAccessImplementation();
-		try {
-			ArrayList<Float> odds = dbManager.getQuestionOddByQuestionID(questionId);
-			dbManager.close();
-			return odds;
-		} catch (NoAnswers e) {
-			throw new NoAnswers(e.getMessage());
-		}	
 	}
 }
 
